@@ -1,0 +1,143 @@
+#!/usr/bin/env python3.5
+import aiohttp
+import asyncio
+import datetime
+import discord
+import json
+import logging
+import random
+import subprocess
+import time
+import traceback
+import websockets
+import sys
+
+from discord.ext import commands
+from discord.utils import get
+from pixie_function import *
+
+import config as cfg
+import backoff
+
+listmodules = readData('main')
+
+bot = commands.Bot(command_prefix='!', description='Navigation Pixie')
+bot.remove_command('help')
+
+async def keep_running(client, token):
+    retry = backoff.ExponentialBackoff()
+    while True:
+        try:
+            await client.login(token)
+        except (discord.HTTPException, aiohttp.ClientError):
+            logging.exception("Discord.py pls login")
+            await asyncio.sleep(retry.delay())
+        else:
+            break
+    while client.is_logged_in:
+        if client.is_closed:
+            client._closed.clear()
+            client.http.recreate()
+        try:
+            await client.connect()
+        except (discord.HTTPException, aiohttp.ClientError,
+                discord.GatewayNotFound, discord.ConnectionClosed,
+                websockets.InvalidHandshake,
+                websockets.WebSocketProtocolError) as e:
+            if isinstance(e, discord.ConnectionClosed) and e.code == 4004:
+                raise # Do not reconnect on authentication failure
+            logging.exception("Discord.py pls keep running")
+            await asyncio.sleep(retry.delay())
+
+@bot.event
+async def on_ready():
+    ptlog('info', 'NAVIGATIONPIXIE', 'Logged in as ' + bot.user.name + ' with ID ' + bot.user.id)
+    #await bot.change_presence(activity=discord.Activity(type=watching, name='Trash Animes'.format(guilds = guildCount, members = memberCount)))
+    await bot.change_presence(game=discord.Game(name='Sword Art online !'))
+    await bot.send_message(bot.get_channel(cfg.botlog_chan), 'Connected ! Loading modules...')
+    #Loading core module first
+    try:
+        bot.load_extension('module_core')
+    except ImportError:
+        await bot.send_message(bot.get_channel(cfg.botlog_chan), '<@258418027844993024> Failed to load core module ! Can\'t init bot instance !')
+        ptlog('fail', 'NAVIGATIONPIXIE', 'Failed to load core module ! Can\'t init bot instance !')
+        await bot.close()
+        sys.exit()
+    except SyntaxError:
+        if module == 'core':
+            await bot.send_message(bot.get_channel(cfg.botlog_chan), '<@258418027844993024> Syntax error on core module ! Can\'t init bot instance !')
+            ptlog('fail', 'NAVIGATIONPIXIE', 'Syntax error on core module ! Can\'t init bot instance !')
+            await bot.close()
+            sys.exit()
+    #Loading modules
+    for module in listmodules:
+        if listmodules[module]["default"] == "loaded":
+            try:
+                bot.load_extension('module_' + module)
+            except ImportError:
+                await bot.send_message(bot.get_channel(cfg.botlog_chan), '```' + traceback.format_exc() + '```')
+                ptlog('fail', 'NAVIGATIONPIXIE', 'Failed to load module ' + module + '.')
+            except SyntaxError:
+                await bot.send_message(bot.get_channel(cfg.botlog_chan), '```' + traceback.format_exc() + '```')
+                ptlog('warn', 'NAVIGATIONPIXIE', 'Bad module : ' + module)
+    await bot.send_message(bot.get_channel(cfg.botlog_chan), 'Ready !')
+    ptlog('info', 'NAVIGATIONPIXIE', 'Connected !')
+
+@bot.event
+async def on_resumed():
+    ptlog('warn', 'NAVIGATIONPIXIE', 'Session resumed...')
+
+@bot.event
+async def on_command_error(error, *args, **kwargs):
+    ctx = args[0]
+    if not str(error) == 'Command "' + ctx.invoked_with + '" is not found':
+        await bot.send_message(bot.get_channel(cfg.botlog_chan), '<@258418027844993024>')
+        embed = discord.Embed(title=':x: Command Error', colour=0x992d22, timestamp=datetime.datetime.utcnow())
+        embed.description = '```py\n%s\n```' % traceback.format_exc()
+        embed.add_field(name='Error', value=error)
+        embed.add_field(name='Server', value=ctx.message.server.name)
+        embed.add_field(name='Channel', value='<#' + ctx.message.channel.id + '>')
+        embed.add_field(name='User', value='<@' + ctx.message.author.id + '>')
+        embed.add_field(name='Command', value='`' + ctx.message.clean_content + '`')
+        await bot.send_message(bot.get_channel(cfg.botlog_chan), embed=embed)
+    else:
+        serverlistmodule = readData('server', ctx.message.server.id)
+        lang = serverlistmodule["bot"]["config"]["lang"]["value"]
+        if lang == 'fr':
+            await bot.send_message(bot.get_channel(ctx.message.channel.id), 'Commande inconnue. Tapez !help pour afficher les commandes disponibles.')
+        elif lang == 'en':
+            await bot.send_message(bot.get_channel(ctx.message.channel.id), 'Unknown command. Type !help for a list of commands.')
+
+@bot.event
+async def on_error(event, *args, **kwargs):
+    await bot.send_message(bot.get_channel(cfg.botlog_chan), '<@258418027844993024>')
+    embed = discord.Embed(title=':x: Event Error', colour=0xe74c3c, timestamp=datetime.datetime.utcnow())
+    embed.description = '```py\n%s\n```' % traceback.format_exc()
+    embed.add_field(name='Event', value=event)
+    await bot.send_message(bot.get_channel(cfg.botlog_chan), embed=embed)
+
+#MISC
+@bot.command(pass_context=True)
+async def quit(ctx):
+    if ctx.message.author.id == '258418027844993024':
+        ptlog('info', 'NAVIGATIONPIXIE', 'SystemExit')
+        await bot.say('Goodbye !')
+        await bot.close()
+        sys.exit()
+
+@bot.event
+async def on_message(message):
+    if message.author == bot.user:
+        return
+    if message.content.startswith('!'):
+        ptlog('info', message.server.name, message.content)
+    if bot.user.mentioned_in(message):
+        try:
+            emoji = get(bot.get_all_emojis(), name='mention')
+            await bot.add_reaction(message, emoji)
+        except:
+            print(traceback.format_exc())
+    await bot.process_commands(message)
+
+#logging.basicConfig(level=logging.DEBUG)
+asyncio.get_event_loop().run_until_complete(keep_running(bot, cfg.token))
