@@ -20,7 +20,7 @@ class Core:
 
     @commands.command(pass_context=True)
     async def checkmodule(self, ctx, arg1):
-        if ctx.message.author.id == '258418027844993024':
+        if ctx.message.author.id == cfg.bot_ownerid:
             if arg1:
                 res = checkModule(arg1)
                 if res.returncode == 0:
@@ -47,7 +47,7 @@ class Core:
     @commands.command(pass_context=True)
     async def load(self, ctx, *args):
         """Load custom bot modules."""
-        if ctx.message.author.id == '258418027844993024':
+        if ctx.message.author.id == cfg.bot_ownerid:
             if args:
                 listmodules = readData('main')
                 for module in args:
@@ -84,7 +84,7 @@ class Core:
     @commands.command(pass_context=True)
     async def unload(self, ctx, *args):
         """Unload custom bot modules."""
-        if ctx.message.author.id == '258418027844993024':
+        if ctx.message.author.id == cfg.bot_ownerid:
             if args:
                 listmodules = readData('main')
                 for module in args:
@@ -106,7 +106,7 @@ class Core:
     @commands.command(pass_context=True)
     async def reload(self, ctx, *args):#IMPROVE, KEYERROR NOT RAISED !
         """Reload given bot modules, or all modules."""
-        if ctx.message.author.id == '258418027844993024':
+        if ctx.message.author.id == cfg.bot_ownerid:
             listmodules = readData('main')
             if args:
                 for module in args:
@@ -201,10 +201,10 @@ class Core:
     @commands.command(pass_context=True)
     async def module(self, ctx):
         """Module list generator"""
-        if(ctx.message.author.id == '258418027844993024' or ctx.message.author.id == ctx.message.author.server.owner.id):
+        if(ctx.message.author.id == cfg.bot_ownerid or ctx.message.author.id == ctx.message.author.server.owner.id):
             listmodules = readData('main')
             serverlistmodules = readData('server', ctx.message.author.server.id)
-            if ctx.message.author.id == '258418027844993024':
+            if ctx.message.author.id == cfg.bot_ownerid:
                 embed = discord.Embed(description=':gear: Module list :', colour=0x7289da, timestamp=datetime.datetime.utcnow())
                 for module in listmodules:
                     if module != 'core':

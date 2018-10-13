@@ -5,6 +5,8 @@ import json
 import random
 import time
 
+import config as cfg
+
 from discord.ext import commands
 from pixie_function import *
 
@@ -28,9 +30,7 @@ class Misc:
 
     @commands.command(pass_context=True)
     async def excuse(self, ctx, rand=1):
-        if ctx.message.author == self.bot.user:
-            return
-        if ctx.message.author.id == '258418027844993024':
+        if ctx.message.author.id == cfg.bot_ownerid:
             count=0
             msg=''
             while True:
