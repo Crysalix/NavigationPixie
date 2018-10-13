@@ -6,8 +6,6 @@ import discord
 from discord.ext import commands
 from pixie_function import *
 
-import config as cfg
-
 class Welcome:
 
     def __init__(self, bot):
