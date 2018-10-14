@@ -123,17 +123,9 @@ class Misc:
 
     @commands.command(pass_context=True)
     async def say(self, ctx):
-        if ctx.message.author.id == '258418027844993024':
+        if ctx.message.author.id == cfg.bot_ownerid:
             msg = ctx.message.content.split(" ", 1)[1]
             await self.bot.say(msg)
-
-    @commands.command(pass_context=True)
-    async def foo(self, ctx):
-        if ctx.message.author.id == '258418027844993024':
-            await self.bot.say('bar')
-            em = discord.Embed(title='My Embed Title', description='My Embed Content.', colour=0xDEADBF, timestamp=datetime.datetime.utcnow())
-            em.set_author(name='Someone', icon_url=self.bot.user.default_avatar_url)
-            await self.bot.send_message(ctx.message.channel, embed=em)
 
 def setup(bot):
     bot.add_cog(Misc(bot))
