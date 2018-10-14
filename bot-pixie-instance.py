@@ -139,5 +139,35 @@ async def on_message(message):
             print(traceback.format_exc())
     await bot.process_commands(message)
 
+@bot.event
+async def on_server_join(server):
+    em = discord.Embed(title=server.name, type='rich', description='Total : ' + str(len(bot.servers)), colour=0x23d160, timestamp=datetime.datetime.utcnow())
+    em.set_author(name='New server joined !', icon_url=server.icon_url)
+    em.set_thumbnail(url=server.icon_url)
+    em.add_field(name='ID', value=server.id)
+    em.add_field(name='Region', value=server.region)
+    em.add_field(name='Owner', value='<@' + server.owner.id + '>')
+    em.add_field(name='Members', value=server.member_count)
+    em.add_field(name='Created at', value=server.created_at)
+    roles = ''
+    for e in server.role_hierarchy:
+        roles = roles + e.name + ' '
+    em.add_field(name='Roles', value=roles)
+    em.add_field(name='2FA', value=server.mfa_level)
+    await bot.send_message(bot.get_channel(cfg.botlog_chan), embed=em)
+
+@bot.event
+async def on_server_remove(server):
+    em = discord.Embed(title=server.name, type='rich', description='Total : ' + str(len(bot.servers)), colour=0xe74c3c, timestamp=datetime.datetime.utcnow())
+    em.set_author(name='Server removed !', icon_url=server.icon_url)
+    em.set_thumbnail(url=server.icon_url)
+    em.add_field(name='ID', value=server.id)
+    em.add_field(name='Region', value=server.region)
+    em.add_field(name='Owner', value='<@' + server.owner.id + '>')
+    em.add_field(name='Members', value=server.member_count)
+    em.add_field(name='Created at', value=server.created_at)
+    em.add_field(name='2FA', value=server.mfa_level)
+    await bot.send_message(bot.get_channel(cfg.botlog_chan), embed=em)
+
 #logging.basicConfig(level=logging.DEBUG)
 asyncio.get_event_loop().run_until_complete(keep_running(bot, cfg.token))
