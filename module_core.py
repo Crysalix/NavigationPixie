@@ -26,7 +26,7 @@ class Core:
                 if res.returncode == 0:
                     await self.bot.say('OK !')
                 else:
-                    await self.bot.say('```' + str(res.stderr.decode().strip()) + '```')
+                    await self.bot.say('```py\n' + str(res.stderr.decode().strip()) + '```')
 
     @commands.command(pass_context=True)
     async def checkconfig(self, ctx, *args):
