@@ -51,7 +51,7 @@ async def keep_running(client, token):
 
 @bot.event
 async def on_ready():
-    ptlog('info', 'NAVIGATIONPIXIE', 'Logged in as ' + bot.user.name + ' with ID ' + bot.user.id)
+    logging.info('NAVIGATIONPIXIE > Logged in as ' + bot.user.name + ' with ID ' + bot.user.id)
     #await bot.change_presence(activity=discord.Activity(type=watching, name='Trash Animes'.format(guilds = guildCount, members = memberCount)))
     await bot.change_presence(game=discord.Game(name='Sword Art online !'))
     await bot.send_message(bot.get_channel(cfg.botlog_chan), 'Connected ! Loading modules...')
@@ -60,13 +60,13 @@ async def on_ready():
         bot.load_extension('module_core')
     except ImportError:
         await bot.send_message(bot.get_channel(cfg.botlog_chan), '<@258418027844993024> Failed to load core module ! Can\'t init bot instance !')
-        ptlog('fail', 'NAVIGATIONPIXIE', 'Failed to load core module ! Can\'t init bot instance !')
+        logging.error('NAVIGATIONPIXIE > Failed to load core module ! Can\'t init bot instance !')
         await bot.close()
         sys.exit()
     except SyntaxError:
         if module == 'core':
             await bot.send_message(bot.get_channel(cfg.botlog_chan), '<@258418027844993024> Syntax error on core module ! Can\'t init bot instance !')
-            ptlog('fail', 'NAVIGATIONPIXIE', 'Syntax error on core module ! Can\'t init bot instance !')
+            logging.error('NAVIGATIONPIXIE > Syntax error on core module ! Can\'t init bot instance !')
             await bot.close()
             sys.exit()
     #Loading modules
@@ -76,16 +76,16 @@ async def on_ready():
                 bot.load_extension('module_' + module)
             except ImportError:
                 await bot.send_message(bot.get_channel(cfg.botlog_chan), '```' + traceback.format_exc() + '```')
-                ptlog('fail', 'NAVIGATIONPIXIE', 'Failed to load module ' + module + '.')
+                logging.error('NAVIGATIONPIXIE > Failed to load module ' + module + '.')
             except SyntaxError:
                 await bot.send_message(bot.get_channel(cfg.botlog_chan), '```' + traceback.format_exc() + '```')
-                ptlog('warn', 'NAVIGATIONPIXIE', 'Bad module : ' + module)
+                logging.warning('NAVIGATIONPIXIE > Bad module : ' + module)
     await bot.send_message(bot.get_channel(cfg.botlog_chan), 'Ready !')
-    ptlog('info', 'NAVIGATIONPIXIE', 'Connected !')
+    logging.info('NAVIGATIONPIXIE > Connected !')
 
 @bot.event
 async def on_resumed():
-    ptlog('warn', 'NAVIGATIONPIXIE', 'Session resumed...')
+   logging.warning('NAVIGATIONPIXIE > Session resumed...')
 
 @bot.event
 async def on_command_error(error, *args, **kwargs):
@@ -120,14 +120,14 @@ async def on_error(event, *args, **kwargs):
 @bot.command(pass_context=True)
 async def restart(ctx):
     if ctx.message.author.id == '258418027844993024':
-        ptlog('info', 'NAVIGATIONPIXIE', 'Restart')
+        logging.info('NAVIGATIONPIXIE > Restart')
         await bot.say('I`ll be back !')
         await bot.close()
 
 @bot.command(pass_context=True)
 async def quit(ctx):
     if ctx.message.author.id == '258418027844993024':
-        ptlog('info', 'NAVIGATIONPIXIE', 'SystemExit')
+        logging.info('NAVIGATIONPIXIE > SystemExit')
         await bot.say('Goodbye !')
         await bot.close()
         sys.exit()
@@ -137,7 +137,7 @@ async def on_message(message):
     if message.author == bot.user:
         return
     if message.content.startswith('!'):
-        ptlog('info', message.server.name, message.content)
+        logging.info(message.server.name + ' > ' + message.content)
     if bot.user.mentioned_in(message):
         try:
             emoji = get(bot.get_all_emojis(), name='mention')
@@ -176,5 +176,5 @@ async def on_server_remove(server):
     em.add_field(name='2FA', value=server.mfa_level)
     await bot.send_message(bot.get_channel(cfg.botlog_chan), embed=em)
 
-#logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(format='%(asctime)s | [%(levelname)s] | %(message)s', datefmt='%m/%d/%Y - %H:%M:%S', filename='latest.log',level=logging.INFO)
 asyncio.get_event_loop().run_until_complete(keep_running(bot, cfg.token))

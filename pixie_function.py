@@ -6,11 +6,6 @@ import subprocess
 import sys
 import traceback
 
-def ptlog(chan, servername, content):
-    current_time = datetime.datetime.now()
-    dnow = "{:%Y/%m/%d - %H:%M:%S}".format(current_time)
-    print(dnow + ' | [' + chan + '] | ' + servername + ' > ' + content)
-
 def isLoaded(module, id):
     if serverslist[id][module]["last"] == "enabled":#wrong vars
         return True
