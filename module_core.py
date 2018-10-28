@@ -59,19 +59,19 @@ class Core:
                         else:
                             res = checkModule(module)
                             if res.returncode != 0:
-                                await self.bot.say('```' + str(res.stderr.decode().strip()) + '```')
+                                await self.bot.say('```py' + str(res.stderr.decode().strip()) + '```')
                             else:
                                 try:
                                     self.bot.load_extension('module_' + module)
                                 except ImportError:
                                     await self.bot.say('Failed to load module **' + module + '**.')
                                 except SyntaxError:
-                                    await self.bot.say('Bad module **' + module + '**.')
+                                    await self.bot.say('```py\n%s\n```' % traceback.format_exc())
                                 except NameError:
-                                    await self.bot.say('```' + traceback.format_exc() + '```')
+                                    await self.bot.say('```py\n%s\n```' % traceback.format_exc())
                                     self.bot.unload_extension('module_' + module)
                                 except discord.ClientException:
-                                    await self.bot.say('```' + traceback.format_exc() + '```')
+                                    await self.bot.say('```py\n%s\n```' % traceback.format_exc())
                                 else:
                                     listmodules[module]["last"] = "loaded"
                                     await self.bot.say('Done !')
