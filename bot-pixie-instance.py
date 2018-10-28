@@ -118,6 +118,13 @@ async def on_error(event, *args, **kwargs):
 
 #MISC
 @bot.command(pass_context=True)
+async def restart(ctx):
+    if ctx.message.author.id == '258418027844993024':
+        ptlog('info', 'NAVIGATIONPIXIE', 'Restart')
+        await bot.say('I`ll be back !')
+        await bot.close()
+
+@bot.command(pass_context=True)
 async def quit(ctx):
     if ctx.message.author.id == '258418027844993024':
         ptlog('info', 'NAVIGATIONPIXIE', 'SystemExit')
