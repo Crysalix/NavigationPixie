@@ -41,10 +41,14 @@ class Logging:
         serverlistmodules = readData('server', before.author.server.id)
         if serverlistmodules["logging"]["last"] == "disabled":
             return
-        if before.content != after.content:
-            channel = str(''.join(filter(str.isdigit, serverlistmodules['logging']['config']['adminlog_chan']['value'])))
-            embed = discord.Embed(description='<@' + before.author.id + '> **dans** <#' + before.channel.id + '>\n**Avant** : ' + before.content + '\n**Après** : ' + after.content, colour=0xFF8000, timestamp=datetime.datetime.utcnow())
-            await self.bot.send_message(self.bot.get_channel(channel), embed=embed)
+        try:
+            if before.content != after.content:
+                channel = str(''.join(filter(str.isdigit, serverlistmodules['logging']['config']['adminlog_chan']['value'])))
+                embed = discord.Embed(description='<@' + before.author.id + '> **dans** <#' + before.channel.id + '>\n**Avant** : ' + before.content + '\n**Après** : ' + after.content, colour=0xFF8000, timestamp=datetime.datetime.utcnow())
+                await self.bot.send_message(self.bot.get_channel(channel), embed=embed)
+        except AttributeError:
+            #Webhook
+            return
 
     async def on_message_delete(self, message):
         if message.author == self.bot.user:
