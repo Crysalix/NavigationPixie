@@ -38,10 +38,10 @@ class Logging:
     async def on_message_edit(self, before, after):
         if before.author.id == self.bot.user.id:
             return
-        serverlistmodules = readData('server', before.author.server.id)
-        if serverlistmodules["logging"]["last"] == "disabled":
-            return
         try:
+            serverlistmodules = readData('server', before.author.server.id)
+            if serverlistmodules["logging"]["last"] == "disabled":
+                return
             if before.content != after.content:
                 channel = str(''.join(filter(str.isdigit, serverlistmodules['logging']['config']['adminlog_chan']['value'])))
                 embed = discord.Embed(description='<@' + before.author.id + '> **dans** <#' + before.channel.id + '>\n**Avant** : ' + before.content + '\n**Après** : ' + after.content, colour=0xFF8000, timestamp=datetime.datetime.utcnow())
