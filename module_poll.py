@@ -24,15 +24,20 @@ class Poll:
         if not isEnabled('poll', ctx.message.author.server.id):
             return
         if args:
-            if len(args) >= 11:
+            if len(args) >= 12:
                 await self.bot.say('Too many args !')
                 return
             #Build message
             rep = ''
             repcontent = '\n'
             if len(args) > 1:
+                if not len(args) > 2:
+                    await self.bot.say('Poll need more than one choice.')
+                    return
                 num = str(len(args))
-                repheader = 'Sondage à ' + num + ' choix proposé par <@' + ctx.message.author.id + '> : '
+                num = int(num)
+                num -= 1
+                repheader = 'Sondage à ' + str(num) + ' choix proposé par <@' + ctx.message.author.id + '> : '
                 react_num = (
                     ':one:',
                     ':two:',
@@ -47,20 +52,24 @@ class Poll:
                 )
                 #rebuild with reactions
                 count = 0
+                req = 0
                 for arg in args:
-                    repcontent = repcontent + 'Choix ' + react_num[count] + ' : ' + arg + '\n'
-                    count += 1
+                    if req == 0:
+                        repcontent = repcontent + ':bar_chart: \"' + arg + '\"\n'
+                        req += 1
+                    else:
+                        repcontent = repcontent + 'Choix ' + react_num[count] + ' : ' + arg + '\n'
+                        count += 1
                 rep = repheader + repcontent
                 await self.bot.say(rep + '\n\nVotez selon votre choix avec les réactions :one:, :two: ...')
             elif len(args) == 1:
-                repheader = 'Petit sondage proposé par <@' + ctx.message.author.id + '> : '
-                repcontent = '\n:bar_chart: **' + args[0] + '** ?'
-                rep = repheader + repcontent
-                await self.bot.say(rep + '\n\nVotez **OUI** avec :thumbup: ou **NON** avec :thumbdown:')
+                embed = discord.Embed(title='', description='\n:bar_chart: **' + args[0] + '**', colour=0x7289da, timestamp=datetime.datetime.utcnow())
+                embed.add_field(name=':thumbup: **OUI**', value=':thumbdown: **NON**', inline=False)
+                await self.bot.send_message(ctx.message.channel, 'Petit sondage proposé par <@' + ctx.message.author.id + '> : ', embed=embed)
         else:
             embed = discord.Embed(title='Sondages express', description='Sondages simples ou à choix multiples. Maximum 10 choix.', colour=0x7289da, timestamp=datetime.datetime.utcnow())
             embed.add_field(name='Pour une simple question', value='!poll "ma question"', inline=False)
-            embed.add_field(name='Pour un sondage à choix multiple', value='!poll "choix 1" "choix 2"', inline=False)
+            embed.add_field(name='Pour un sondage à choix multiple', value='!poll "ma question" "choix 1" "choix 2"', inline=False)
             embed.set_footer(text='N\'oubliez pas les guillemets.')
             await self.bot.send_message(ctx.message.channel, embed=embed)
 
