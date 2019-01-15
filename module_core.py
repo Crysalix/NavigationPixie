@@ -27,6 +27,8 @@ class Core:
                     await self.bot.say('OK !')
                 else:
                     await self.bot.say('```py\n' + str(res.stderr.decode().strip()) + '```')
+            else:
+                await self.bot.say('Missing module name !')
 
     @commands.command(pass_context=True)
     async def checkconfig(self, ctx, *args):
@@ -204,7 +206,7 @@ class Core:
         if(ctx.message.author.id == cfg.bot_ownerid or ctx.message.author.id == ctx.message.author.server.owner.id):
             listmodules = readData('main')
             serverlistmodules = readData('server', ctx.message.author.server.id)
-            if ctx.message.author.id == cfg.bot_ownerid:
+            if ctx.message.author.id == cfg.bot_ownerid and ctx.message.channel.id == cfg.botlog_chan:
                 embed = discord.Embed(description=':gear: Module list :', colour=0x7289da, timestamp=datetime.datetime.utcnow())
                 for module in listmodules:
                     if module != 'core':
