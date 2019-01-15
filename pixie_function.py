@@ -41,6 +41,12 @@ def readData(file, id = None, module = None):
     elif file == 'list':
         with open('data/serverslist.json') as e:
             data = json.load(e)
+    elif file == 'locales':
+        with open('data/locales.json') as e:
+            data = json.load(e)
+        for lang in data:
+            with open('data/locales/' + lang + '.json') as e:
+                data[lang] = json.load(e)
     elif file == 'server':
         try:
             with open('data/servers/' + id + '.json') as e:
