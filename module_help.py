@@ -14,6 +14,7 @@ class Help:
 
     def __init__(self, bot):
         self.bot = bot
+        self.locales = readData('locales')
 
     def __unload(self):
         pass
@@ -23,6 +24,7 @@ class Help:
         """Help message generator."""
         listmodules = readData('main')
         serverlistmodules = readData('server', ctx.message.author.server.id)
+        lang = serverlistmodules['bot']['config']['lang']['value']
         if ctx.message.author == self.bot.user:
             return
         # botmaster help command
@@ -53,9 +55,9 @@ class Help:
             embed.add_field(name='!rand', value='Random sur base du nombre donné.', inline=False)
             embed.add_field(name='!roll', value='Je lance un dé à 6 faces.', inline=False)
         if (listmodules["jokes"]["last"] == "loaded" and serverlistmodules["jokes"]["last"] == "enabled"):
-            embed.add_field(name='!joke', value='Je raconte une blague.', inline=False)
+            embed.add_field(name='!joke', value=self.locales[lang]['jokes']['commands']['joke'], inline=False)
         if (listmodules["poll"]["last"] == "loaded" and serverlistmodules["poll"]["last"] == "enabled"):
-            embed.add_field(name='!poll', value='Sondage express.', inline=False)
+            embed.add_field(name='!poll', value=self.locales[lang]['poll']['commands']['poll'], inline=False)
         await self.bot.send_message(ctx.message.channel, embed=embed)
 
 def setup(bot):
