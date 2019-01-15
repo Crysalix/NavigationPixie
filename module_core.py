@@ -254,7 +254,7 @@ class Core:
                         else:
                             embed = discord.Embed(title=':gear: Module **' + args[0] + '** configuration :', description='(Module is `' + serverlistmodule[args[0]]["last"] + '`)', colour=0x7289da, timestamp=datetime.datetime.utcnow())
                         for cfgkey in serverlistmodule[args[0]]["config"]:
-                            embed.add_field(name='**' + cfgkey + '**', value='**Desription** : ' + serverlistmodule[args[0]]["config"][cfgkey]["description"][lang] + '\n**Value** (' + serverlistmodule[args[0]]["config"][cfgkey]["type"] + '): ' + serverlistmodule[args[0]]["config"][cfgkey]["value"], inline=False)
+                            embed.add_field(name='**' + cfgkey + '**', value='**Description** : ' + serverlistmodule[args[0]]["config"][cfgkey]["description"][lang] + '\n**Value** (' + serverlistmodule[args[0]]["config"][cfgkey]["type"] + '): ' + serverlistmodule[args[0]]["config"][cfgkey]["value"], inline=False)
                         embed.set_footer(text='Usage : !config ' + args[0] + ' <ConfigName> <add/remove/set> <value>')
                         await self.bot.send_message(ctx.message.channel, embed=embed)
                         return
@@ -264,7 +264,7 @@ class Core:
                             args[2]
                         except:#no value for configkey
                             embed = discord.Embed(title=':gear: Module **' + args[0] + '** configuration :', description='Actual configuration.', colour=0x7289da, timestamp=datetime.datetime.utcnow())
-                            embed.add_field(name='**' + args[1] + '**', value='**Desription** : ' + serverlistmodule[args[0]]["config"][args[1]]["description"][lang] + '\n**Value** (' + serverlistmodule[args[0]]["config"][args[1]]["type"] + '): ' + serverlistmodule[args[0]]["config"][args[1]]["value"], inline=False)
+                            embed.add_field(name='**' + args[1] + '**', value='**Description** : ' + serverlistmodule[args[0]]["config"][args[1]]["description"][lang] + '\n**Value** (' + serverlistmodule[args[0]]["config"][args[1]]["type"] + '): ' + serverlistmodule[args[0]]["config"][args[1]]["value"], inline=False)
                             if serverlistmodule[args[0]]["config"][args[1]]["type"] == 'bool':
                                 embed.set_footer(text='Usage : !config ' + args[0] + args[1] + ' <ConfigName> <set> <true/false>')
                             else:
@@ -299,7 +299,7 @@ class Core:
                                     serverlistmodule[args[0]]["config"][args[1]]["value"] = args[3]
                                     saveData('server', serverlistmodule, ctx.message.author.server.id)
                                     embed = discord.Embed(title=':gear: Module **' + args[0] + '** configuration :', description='New configuration saved !', colour=0x00FF00, timestamp=datetime.datetime.utcnow())
-                                    embed.add_field(name='**' + args[1] + '**', value='**Desription** : ' + serverlistmodule[args[0]]["config"][args[1]]["description"][lang] + '\n**Value** (' + serverlistmodule[args[0]]["config"][args[1]]["type"] + '): ' + serverlistmodule[args[0]]["config"][args[1]]["value"], inline=False)
+                                    embed.add_field(name='**' + args[1] + '**', value='**Description** : ' + serverlistmodule[args[0]]["config"][args[1]]["description"][lang] + '\n**Value** (' + serverlistmodule[args[0]]["config"][args[1]]["type"] + '): ' + serverlistmodule[args[0]]["config"][args[1]]["value"], inline=False)
                                     await self.bot.send_message(ctx.message.channel, embed=embed)
                                 else:#bad value
                                     await self.bot.say('DEBUG : Wrong value !')
