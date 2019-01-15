@@ -1,0 +1,63 @@
+{
+  "admin": {
+    "config": {
+      "adminlist": "List of user who can use Admin command."
+    },
+    "commands": "None"
+  },
+  "bot": {
+    "config": {
+      "lang": "Bot languages. Can be set to `en` or `fr`."
+    }
+  },
+  "games": {
+    "commands": "None"
+  },
+  "help": {
+    "config": {
+      "rep": "Where to reply to `!help` command. (`pm` for private message or `chan` for the current channel)"
+    },
+    "commands": {
+      "help": "Affiche ce message."
+    }
+  },
+  "jokes": {
+    "commands": {
+      "joke": "I tell a joke."
+    }
+  },
+  "logging": {
+    "config": {
+      "modlog_chan": "Channel defined for posting moderation log message.",
+      "adminlog_chan": "Channel defined for posting administration log message."
+    },
+    "commands": "None"
+  },
+  "misc": {
+    "commands": {
+      "flip": "Heads or tails ?",
+      "roll": "I roll a six-sided dice.",
+      "ping": "Pong !",
+      "rand": "Random from given number."
+    }
+  },
+  "mod": {
+    "config": {
+      "modlist": "List of user who can use Moderator command."
+    },
+    "commands": "None"
+  },
+  "poll": {
+    "commands": {
+      "poll": "Submit simple poll."
+    },
+    "config": "None"
+  },
+  "welcome": {
+    "config": {
+      "message": "Message posted when a user join the server.",
+      "channel": "The channel where the messages are posted."
+    },
+    "commands": "None"
+  }
+}
