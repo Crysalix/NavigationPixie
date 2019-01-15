@@ -26,7 +26,7 @@ class Help:
         if ctx.message.author == self.bot.user:
             return
         # botmaster help command
-        if ctx.message.author.id == cfg.bot_ownerid:
+        if ctx.message.author.id == cfg.bot_ownerid and ctx.message.channel.id == cfg.botlog_chan:
             embed = discord.Embed(description=':gear: Botmaster Commands list :', colour=0x7289da, timestamp=datetime.datetime.utcnow())
             embed.add_field(name='!load', value='Load bot modules.', inline=False)
             embed.add_field(name='!unload', value='Unload bot modules.', inline=False)
