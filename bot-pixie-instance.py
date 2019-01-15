@@ -26,6 +26,7 @@ bot.remove_command('help')
 
 async def keep_running(client, token):
     retry = backoff.ExponentialBackoff()
+    logging.info('DEBUG KEEP RUNNING')
     while True:
         try:
             await client.login(token)
@@ -35,6 +36,7 @@ async def keep_running(client, token):
         else:
             break
     while client.is_logged_in:
+        logging.info('while client.is_logged_in')
         if client.is_closed:
             client._closed.clear()
             client.http.recreate()
@@ -100,13 +102,6 @@ async def on_command_error(error, *args, **kwargs):
         embed.add_field(name='User', value='<@' + ctx.message.author.id + '>')
         embed.add_field(name='Command', value='`' + ctx.message.clean_content + '`')
         await bot.send_message(bot.get_channel(cfg.botlog_chan), embed=embed)
-    else:
-        serverlistmodule = readData('server', ctx.message.server.id)
-        lang = serverlistmodule["bot"]["config"]["lang"]["value"]
-        if lang == 'fr':
-            await bot.send_message(bot.get_channel(ctx.message.channel.id), 'Commande inconnue. Tapez !help pour afficher les commandes disponibles.')
-        elif lang == 'en':
-            await bot.send_message(bot.get_channel(ctx.message.channel.id), 'Unknown command. Type !help for a list of commands.')
 
 @bot.event
 async def on_error(event, *args, **kwargs):
