@@ -15,7 +15,7 @@
                 "value": "Welcome to my awesome server !"
             },
 			"channel": {
-                "type": "tag",
+                "type": "chantag",
                 "value": "None"
             }
 		},
@@ -27,7 +27,7 @@
 			"rep": {
                 "type": "str",
                 "validate": "pm/channel",
-                "value": "chan"
+                "value": "channel"
             }
 		},
         "last": "global",
@@ -46,7 +46,7 @@
     "admin": {
 		"config": {
 			"adminlist": {
-                "type": "tag",
+                "type": "usertaglist",
                 "value": "None"
             }
 		},
@@ -56,7 +56,7 @@
     "mod": {
 		"config": {
 			"modlist": {
-                "type": "tag",
+                "type": "usertaglist",
                 "value": "None"
             }
 		},
@@ -76,11 +76,11 @@
     "logging": {
 		"config": {
 			"modlog_chan": {
-                "type": "tag",
+                "type": "chantag",
                 "value": "None"
             },
 			"adminlog_chan": {
-                "type": "tag",
+                "type": "chantag",
                 "value": "None"
             }
 		},

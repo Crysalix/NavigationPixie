@@ -236,78 +236,105 @@ class Core:
                 serverlistmodule = readData('server', ctx.message.author.server.id)
                 lang = serverlistmodule["bot"]["config"]["lang"]["value"]
                 #module ? or bot config ?
-                if (validateModuleName(args[0]) or args[0] == "bot"):
+                module = args[0]
+                if (validateModuleName(module) or module == "bot"):
                     defaultlistmodule = getDefault()
                     #is configurable ?
-                    if defaultlistmodule[args[0]]['config'] == "None":
+                    if defaultlistmodule[module]['config'] == "None":
                         await self.bot.say(self.locales[lang]['core']['messages']['noconfigneeded'])
                         return
                     try:
-                        args[1]
+                        configKey = args[1]
                     except:#no config key specified
-                        if args[0] == 'bot':
-                            embed = discord.Embed(title=':gear: Module **' + args[0] + '** configuration :', description='', colour=0x7289da, timestamp=datetime.datetime.utcnow())
+                        if module == 'bot':
+                            embed = discord.Embed(title=':gear: Module **' + module + '** configuration :', description='', colour=0x7289da, timestamp=datetime.datetime.utcnow())
                         else:
-                            embed = discord.Embed(title=':gear: Module **' + args[0] + '** configuration :', description='(Module is `' + serverlistmodule[args[0]]["last"] + '`)', colour=0x7289da, timestamp=datetime.datetime.utcnow())
-                        for cfgkey in serverlistmodule[args[0]]["config"]:
-                            embed.add_field(name='**' + cfgkey + '**', value='**Description** : ' + self.locales[lang][args[0]]['config'][cfgkey] + '\n**Value** (' + serverlistmodule[args[0]]["config"][cfgkey]["type"] + '): ' + serverlistmodule[args[0]]["config"][cfgkey]["value"], inline=False)
-                        embed.set_footer(text='Usage : !config ' + args[0] + ' <ConfigName> <add/remove/set> <value>')
+                            embed = discord.Embed(title=':gear: Module **' + module + '** configuration :', description='(Module is `' + serverlistmodule[module]["last"] + '`)', colour=0x7289da, timestamp=datetime.datetime.utcnow())
+                        for cfgkey in serverlistmodule[module]["config"]:
+                            embed.add_field(name='**' + cfgkey + '**', value='**Description** : ' + self.locales[lang][module]['config'][cfgkey] + '\n**Value** (' + serverlistmodule[module]["config"][cfgkey]["type"] + '): ' + serverlistmodule[module]["config"][cfgkey]["value"], inline=False)
+                        embed.set_footer(text='Usage : !config ' + module + ' <configKey> <add/set/remove/clear> (value)')
                         await self.bot.send_message(ctx.message.channel, embed=embed)
                         return
-                    if validateConfigKey(ctx.message.author.server.id, args[0], args[1]):
-                        #configkey ?
+                    if validateConfigKey(ctx.message.author.server.id, module, configKey):
+                        #configkey action ?
                         try:
-                            args[2]
-                        except:#no value for configkey
-                            embed = discord.Embed(title=':gear: Module **' + args[0] + '** configuration :', description=self.locales[lang]['core']['messages']['actualconf'], colour=0x7289da, timestamp=datetime.datetime.utcnow())
-                            embed.add_field(name='**' + args[1] + '**', value='**Description** : ' + self.locales[lang][args[0]]['config'][args[1]] + '\n**Value** (' + serverlistmodule[args[0]]["config"][args[1]]["type"] + '): ' + serverlistmodule[args[0]]["config"][args[1]]["value"], inline=False)
-                            if serverlistmodule[args[0]]["config"][args[1]]["type"] == 'bool':
-                                embed.set_footer(text='Usage : !config ' + args[0] + args[1] + ' <ConfigName> <set> <true/false>')
-                            else:
-                                embed.set_footer(text='Usage : !config ' + args[0] + args[1] + ' <ConfigName> <set/add/remove> <value>')
+                            action = args[2]
+                        except:#no action specified
+                            embed = discord.Embed(title=':gear: Module **' + module + '** configuration :', description=self.locales[lang]['core']['messages']['actualconf'], colour=0x7289da, timestamp=datetime.datetime.utcnow())
+                            embed.add_field(name='**' + configKey + '**', value='**Description** : ' + self.locales[lang][module]['config'][configKey] + '\n**Value** (' + serverlistmodule[module]["config"][configKey]["type"] + '): ' + serverlistmodule[module]["config"][configKey]["value"], inline=False)
+                            validAction = getValidAction(module, configKey)
+                            embed.set_footer(text='Usage : !config ' + module + ' ' + configKey + ' ' + validAction + ' (value)')
                             await self.bot.send_message(ctx.message.channel, embed=embed)
                             return
-                        if(args[2] == 'remove' or args[2] == 'clear'):
-                            if args[2] == 'remove':
-                                try:
-                                    args[3]
-                                except IndexError:
-                                    await self.bot.say('DEBUG : Remove action need a value!')
+                        if(action == 'remove' or action == 'clear'):
+                            if action == 'remove':
+                                #canRemove ?
+                                if (serverlistmodule[module]["config"][configKey]["type"] == 'chantag' or serverlistmodule[module]["config"][configKey]["type"] == 'usertag'):
+                                    try:
+                                        args[3]
+                                    except IndexError:
+                                        await self.bot.say(self.locales[lang]['core']['messages']['actionargmissing'] + '\n`!config <module> <configKey> <remove> <value>`')
+                                    else:
+                                        await self.bot.say('Command not yet supported')
+                                        return
+                                        removeConfig('remove', ctx.message.author.server.id, module, configKey, args[3])
                                 else:
-                                    await self.bot.say('Command not yet supported')
-                                    return
-                                    removeConfig('remove', ctx.message.author.server.id, args[0], args[1], args[3])
-                            elif args[2] == 'clear':
+                                    await self.bot.say(self.locales[lang]['core']['messages']['cantuseaction'].format(action, configKey, 'clear'))
+                            elif action == 'clear':
                                 try:
                                     args[3]
                                 except IndexError:
-                                    removeConfig('clear', ctx.message.author.server.id, args[0], args[1])
+                                    removeConfig('clear', ctx.message.author.server.id, module, configKey)
+                                    if checkModuleConfig(module, ctx.message.author.server.id):
+                                        await self.bot.say(self.locales[lang]['core']['messages']['configclear'])
+                                    else:
+                                        serverlistmodule[module]["last"] = "disabled"
+                                        saveData('server', serverlistmodule, ctx.message.author.server.id)
+                                        await self.bot.say(self.locales[lang]['core']['messages']['configclear'] + self.locales[lang]['core']['messages']['needreconfig'])
                                 else:
                                     await self.bot.say(self.locales[lang]['core']['messages']['clearnoarg'])
-                        elif(args[2] == 'add' or args[2] == 'set'):
-                            try:
-                                args[3]
-                            except IndexError:
-                                await self.bot.say('DEBUG : Missing value !')
-                            else:
-                                if validateConfigKeyType(ctx.message.author.server.id, serverlistmodule[args[0]]["config"][args[1]]["type"], args[0], args[1], args[3]):
-                                    #configkey valid ?
-                                    serverlistmodule[args[0]]["config"][args[1]]["value"] = args[3]
-                                    saveData('server', serverlistmodule, ctx.message.author.server.id)
-                                    embed = discord.Embed(title=':gear: Module **' + args[0] + '** configuration :', description=self.locales[lang]['core']['messages']['configsaved'], colour=0x00FF00, timestamp=datetime.datetime.utcnow())
-                                    embed.add_field(name='**' + args[1] + '**', value='**Description** : ' + self.locales[lang][args[0]]['config'][args[1]] + '\n**Value** (' + serverlistmodule[args[0]]["config"][args[1]]["type"] + '): ' + serverlistmodule[args[0]]["config"][args[1]]["value"], inline=False)
-                                    await self.bot.send_message(ctx.message.channel, embed=embed)
-                                else:#bad value
-                                    await self.bot.say('DEBUG : Wrong value !')
+                        elif(action == 'add' or action == 'set'):
+                            if action == 'add':
+                                if (serverlistmodule[module]["config"][configKey]["type"] == 'chantag' or serverlistmodule[module]["config"][configKey]["type"] == 'usertag'):
+                                    try:
+                                        args[3]
+                                    except IndexError:
+                                        await self.bot.say(self.locales[lang]['core']['messages']['actionargmissing'] + '\n`!config <module> <configKey> <add> <value>`')
+                                    else:
+                                        if validateConfigKeyType(ctx.message.author.server.id, serverlistmodule[module]["config"][configKey]["type"], module, configKey, args[3]):
+                                            await self.bot.say('Command not yet supported')
+                                            return
+                                        else:#bad value
+                                            await self.bot.say(self.locales[lang]['core']['messages']['invalidvalue'])
+                                else:
+                                    await self.bot.say(self.locales[lang]['core']['messages']['cantuseaction'].format(action, configKey, 'set'))
+                            elif action == 'set':
+                                try:
+                                    args[3]
+                                except IndexError:
+                                    await self.bot.say(self.locales[lang]['core']['messages']['actionargmissing'] + '\n`!config <module> <configKey> <set> <value>`')
+                                else:
+                                    if validateConfigKeyType(ctx.message.author.server.id, serverlistmodule[module]["config"][configKey]["type"], module, configKey, args[3]):
+                                        if validateValue(module, configKey, args[3]):
+                                            serverlistmodule[module]["config"][configKey]["value"] = args[3]
+                                            saveData('server', serverlistmodule, ctx.message.author.server.id)
+                                            embed = discord.Embed(title=':gear: Module **' + module + '** configuration :', description=self.locales[lang]['core']['messages']['configsaved'], colour=0x00FF00, timestamp=datetime.datetime.utcnow())
+                                            embed.add_field(name='**' + configKey + '**', value='**Description** : ' + self.locales[lang][module]['config'][configKey] + '\n**Value** (' + serverlistmodule[module]["config"][configKey]["type"] + '): ' + serverlistmodule[module]["config"][configKey]["value"], inline=False)
+                                            await self.bot.send_message(ctx.message.channel, embed=embed)
+                                        else:
+                                            await self.bot.say(self.locales[lang]['core']['messages']['invalidvalue'])
+                                    else:#bad value
+                                        await self.bot.say(self.locales[lang]['core']['messages']['invalidvalue'])
                         else:
-                            await self.bot.say('DEBUG : ACTION NEEDED !')
+                            validAction = getValidAction(module, configKey)
+                            await self.bot.say('Valid action for `' + configKey + '` is `' + validAction + '`')
                     else:#bad config key
-                        await self.bot.say('DEBUG : Bad config key !')
+                        await self.bot.say(self.locales[lang]['core']['messages']['badconfigkey'])
                 else:#module unknown
-                    await self.bot.say(self.locales[lang]['core']['messages']['nomodule'].format(args[0]))
+                    await self.bot.say(self.locales[lang]['core']['messages']['nomodule'].format(module))
             else:#module missing
                 embed = discord.Embed(description=':gear: Module configuration :', colour=0x7289da, timestamp=datetime.datetime.utcnow())
-                embed.add_field(name='Usage :', value='!config <module> <configkey> <add/remove/set/clear> <value>', inline=False)
+                embed.add_field(name='Usage :', value='!config <module> <configKey> <add/remove/set/clear> (value)', inline=False)
                 embed.add_field(name='Example :', value='!config welcome message set "Hello and welcome to my awesome server !"', inline=False)
                 await self.bot.send_message(ctx.message.channel, embed=embed)
 

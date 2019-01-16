@@ -29,8 +29,8 @@ def checkModuleConfig(module, id):
     if defaultlistmodule[module]['config'] == "None":
         return True
     else:
-        for cfgkey in serverlistmodule[module]['config']:
-            if serverlistmodule[module]['config'][cfgkey]['value'] == "None":
+        for configKey in serverlistmodule[module]['config']:
+            if serverlistmodule[module]['config'][configKey]['value'] == "None":
                 return False
         return True
 
@@ -87,7 +87,16 @@ def getDefault():
     with open('data/default.json') as e:
         data = json.load(e)
     return data
-        
+
+def getValidAction(module, configKey):
+    data = getDefault()
+    #actions = ''
+    if (data[module]['config'][configKey]['type'] == 'chantag' or data[module]['config'][configKey]['type'] == 'usertag' or data[module]['config'][configKey]['type'] == 'str'):
+        actions = '<set/clear>'
+    elif (data[module]['config'][configKey]['type'] == 'chantaglist' or data[module]['config'][configKey]['type'] == 'usertaglist'):
+        actions = '<add/remove/clear>'
+    return actions
+
 def validateModuleName(moduleName):
     listmodule = readData('main')
     try:
@@ -96,16 +105,16 @@ def validateModuleName(moduleName):
         return False
     return True
 
-def validateConfigKey(id, module, cfgkey = None):
+def validateConfigKey(id, module, configKey = None):
     defaultlistmodule = getDefault()
     #serverlistmodule = readData('server', id)
     try:
-        defaultlistmodule[module]['config'][cfgkey]
+        defaultlistmodule[module]['config'][configKey]
     except KeyError:
         return False
     return True
 
-def validateConfigKeyType(id, type, module, cfgkey, value):
+def validateConfigKeyType(id, type, module, configKey, value):
     defaultlistmodule = getDefault()
     #serverlistmodule = readData('server', id)
     try:
@@ -113,23 +122,39 @@ def validateConfigKeyType(id, type, module, cfgkey, value):
             bool(value)
         elif type == 'str':
             str(value)
-        elif type == 'tag':
+        elif type == 'chantag':
             if re.search('^<#([0-9])+>$', value):
                 value = int(''.join(filter(str.isdigit, value)))
-            elif re.search('^<@([0-9])+>$', value):
+                int(value)
+        elif type == 'usertag':
+            if re.search('^<@([0-9])+>$', value):
                 value = int(''.join(filter(str.isdigit, value)))
-            int(value)
+                int(value)
         elif type == 'int':
             int(value)
     except:
         return False
     return True
 
-def removeConfig(action, id, module, cfgkey, value = None):
+def validateValue(module, configKey, left):
+    defaultlistmodule = getDefault()
+    try:
+        validate = defaultlistmodule[module]['config'][configKey]['validate']
+    except:#no validation info
+        return True
+    else:
+        fighters = validate.split("/")
+        for right in fighters:
+            #Fight !
+            if left == right:
+                return True #left win !
+        return False #right win !
+    
+def removeConfig(action, id, module, configKey, value = None):
     if action == 'clear':
         defaultlistmodule = getDefault()
         serverlistmodule = readData('server', id, module)
-        serverlistmodule[module]['config'][cfgkey]['value'] = defaultlistmodule[module]['config'][cfgkey]['value']
+        serverlistmodule[module]['config'][configKey]['value'] = defaultlistmodule[module]['config'][configKey]['value']
         saveData('server', serverlistmodule, id)
     elif action == 'remove':
         return

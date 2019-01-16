@@ -27,7 +27,13 @@
       "noconfigneeded": "Ce module n'a pas besoin de configuration.",
       "actualconf": "Configuration actuelle.",
       "clearnoarg": "L'option `clear` n'a pas besoin d'arguments.",
-      "configsaved": "Nouvelle configuration enregistré !"
+      "configsaved": "Nouvelle configuration enregistré !",
+      "configclear": "Configuration réinitialisé !",
+      "needreconfig": "\n:warning: Module désactivé, reconfiguration nécéssaire.",
+      "actionargmissing": "Cette action requiert un argument supplémentaire.",
+      "badconfigkey": "configKey inconnu !",
+      "invalidvalue": "Configuration invalide.",
+      "cantuseaction": "L'action `{}` ne peut pas être utilisé avec `{}`. Utilisez `{}`."
     }
   },
   "games": {
