@@ -61,13 +61,13 @@ async def on_ready():
     try:
         bot.load_extension('module_core')
     except ImportError:
-        await bot.send_message(bot.get_channel(cfg.botlog_chan), '<@258418027844993024> Failed to load core module ! Can\'t init bot instance !')
+        await bot.send_message(bot.get_channel(cfg.botlog_chan), '<@' + cfg.bot_ownerid + '> Failed to load core module ! Can\'t init bot instance !')
         logging.error('NAVIGATIONPIXIE > Failed to load core module ! Can\'t init bot instance !')
         await bot.close()
         sys.exit()
     except SyntaxError:
         if module == 'core':
-            await bot.send_message(bot.get_channel(cfg.botlog_chan), '<@258418027844993024> Syntax error on core module ! Can\'t init bot instance !')
+            await bot.send_message(bot.get_channel(cfg.botlog_chan), '<@' + cfg.bot_ownerid + '> Syntax error on core module ! Can\'t init bot instance !')
             logging.error('NAVIGATIONPIXIE > Syntax error on core module ! Can\'t init bot instance !')
             await bot.close()
             sys.exit()
@@ -93,7 +93,7 @@ async def on_resumed():
 async def on_command_error(error, *args, **kwargs):
     ctx = args[0]
     if not str(error) == 'Command "' + ctx.invoked_with + '" is not found':
-        await bot.send_message(bot.get_channel(cfg.botlog_chan), '<@258418027844993024>')
+        await bot.send_message(bot.get_channel(cfg.botlog_chan), '<@' + cfg.bot_ownerid + '>')
         embed = discord.Embed(title=':x: Command Error', colour=0x992d22, timestamp=datetime.datetime.utcnow())
         embed.description = '```py\n%s\n```' % traceback.format_exc()
         embed.add_field(name='Error', value=error)
@@ -105,7 +105,7 @@ async def on_command_error(error, *args, **kwargs):
 
 @bot.event
 async def on_error(event, *args, **kwargs):
-    await bot.send_message(bot.get_channel(cfg.botlog_chan), '<@258418027844993024>')
+    await bot.send_message(bot.get_channel(cfg.botlog_chan), '<@' + cfg.bot_ownerid + '>')
     embed = discord.Embed(title=':x: Event Error', colour=0xe74c3c, timestamp=datetime.datetime.utcnow())
     embed.description = '```py\n%s\n```' % traceback.format_exc()
     embed.add_field(name='Event', value=event)
@@ -114,14 +114,14 @@ async def on_error(event, *args, **kwargs):
 #MISC
 @bot.command(pass_context=True)
 async def restart(ctx):
-    if ctx.message.author.id == '258418027844993024':
+    if ctx.message.author.id == cfg.bot_ownerid:
         logging.info('NAVIGATIONPIXIE > Restart')
         await bot.say('I`ll be back !')
         await bot.close()
 
 @bot.command(pass_context=True)
 async def quit(ctx):
-    if ctx.message.author.id == '258418027844993024':
+    if ctx.message.author.id == cfg.bot_ownerid:
         logging.info('NAVIGATIONPIXIE > SystemExit')
         await bot.say('Goodbye !')
         await bot.close()
@@ -132,6 +132,7 @@ async def on_message(message):
     if message.author == bot.user:
         return
     if message.content.startswith('!'):
+        #logging commands only (including unknown commands)
         logging.info(message.server.name + ' > ' + message.content)
     if bot.user.mentioned_in(message):
         try:
