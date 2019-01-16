@@ -14,6 +14,7 @@ class Core:
 
     def __init__(self, bot):
         self.bot = bot
+        self.locales = readData('locales')
 
     def __unload(self):
         pass
@@ -28,23 +29,8 @@ class Core:
                 else:
                     await self.bot.say('```py\n' + str(res.stderr.decode().strip()) + '```')
             else:
-                await self.bot.say('Missing module name !')
+                await self.bot.say('Module name required !')
 
-    @commands.command(pass_context=True)
-    async def checkconfig(self, ctx, *args):
-        if ctx.message.author.id == ctx.message.author.server.owner.id:
-            if args:
-                for module in args:
-                    if validateModuleName(module):
-                        if checkModuleConfig(module, ctx.message.author.server.id):
-                            await self.bot.say('OK !')
-                        else:
-                            await self.bot.say('Configuration incomplete !')
-                    else:
-                        await self.bot.say('Unknown module **' + module + '**.')
-            else:
-                await self.bot.say('Missing module name !')
-                    
     #MODULE LOAD/UNLOAD/RELOAD COMMAND (BOTMASTER ONLY)
     @commands.command(pass_context=True)
     async def load(self, ctx, *args):
@@ -154,6 +140,8 @@ class Core:
     @commands.command(pass_context=True)
     async def enable(self, ctx, *args):
         if ctx.message.author.id == ctx.message.author.server.owner.id:
+            serverlistmodules = readData('server', ctx.message.author.server.id)
+            lang = serverlistmodules['bot']['config']['lang']['value']
             if args:
                 listmodules = readData('main')
                 for module in args:
@@ -163,22 +151,24 @@ class Core:
                         serverlistmodules = readData('server', ctx.message.author.server.id, module)
                         listmodules[module]
                     except KeyError:
-                        await self.bot.say('Unknown module **' + module + '**.')
+                        await self.bot.say(self.locales[lang]['core']['messages']['nomodule'].format(module))
                     else:
                         if serverlistmodules[module]["last"] == "enabled":
-                            await self.bot.say('Module **' + module + '** already enabled.')
+                            await self.bot.say(self.locales[lang]['core']['messages']['alreadyenabled'].format(module))
                         elif checkModuleConfig(module, ctx.message.author.server.id):
                             serverlistmodules[module]["last"] = "enabled"
                             saveData('server', serverlistmodules, ctx.message.author.server.id)
                             await self.bot.say('Done !')
                         else:
-                            await self.bot.say('Module **' + module + '** is not configured.')
+                            await self.bot.say(self.locales[lang]['core']['messages']['noconfig'])
             else:
-                await self.bot.say('Missing module name !')
+                await self.bot.say(self.locales[lang]['core']['messages']['modulerequired'])
 
     @commands.command(pass_context=True)
     async def disable(self, ctx, *args):
         if ctx.message.author.id == ctx.message.author.server.owner.id:
+            serverlistmodules = readData('server', ctx.message.author.server.id)
+            lang = serverlistmodules['bot']['config']['lang']['value']
             if args:
                 listmodules = readData('main')
                 for module in args:
@@ -188,16 +178,16 @@ class Core:
                         serverlistmodules = readData('server', ctx.message.author.server.id)
                         listmodules[module]
                     except KeyError:
-                        await self.bot.say('Unknown module **' + module + '**.')
+                        await self.bot.say(self.locales[lang]['core']['messages']['nomodule'].format(module))
                     else:
                         if serverlistmodules[module]["last"] == "disabled":
-                            await self.bot.say('Module **' + module + '** already disabled.')
+                            await self.bot.say(self.locales[lang]['core']['messages']['alreadydisabled'].format(module))
                         else:
                             serverlistmodules[module]["last"] = "disabled"
                             saveData('server', serverlistmodules, ctx.message.author.server.id)
                             await self.bot.say('Done !')
             else:
-                await self.bot.say('Missing module name !')
+                await self.bot.say(self.locales[lang]['core']['messages']['modulerequired'])
 
     #MODULE LIST VIEWER
     @commands.command(pass_context=True)
@@ -237,14 +227,14 @@ class Core:
         """Bot module configuration"""
         if ctx.message.author.id == ctx.message.author.server.owner.id:
             if args:
+                serverlistmodule = readData('server', ctx.message.author.server.id)
+                lang = serverlistmodule["bot"]["config"]["lang"]["value"]
                 #module ? or bot config ?
                 if (validateModuleName(args[0]) or args[0] == "bot"):
-                    serverlistmodule = readData('server', ctx.message.author.server.id)
-                    lang = serverlistmodule["bot"]["config"]["lang"]["value"]
                     defaultlistmodule = getDefault()
                     #is configurable ?
                     if defaultlistmodule[args[0]]['config'] == "None":
-                        await self.bot.say('This module don\'t need configuration.')
+                        await self.bot.say(self.locales[lang]['core']['messages']['noconfigneeded'])
                         return
                     try:
                         args[1]
@@ -254,7 +244,7 @@ class Core:
                         else:
                             embed = discord.Embed(title=':gear: Module **' + args[0] + '** configuration :', description='(Module is `' + serverlistmodule[args[0]]["last"] + '`)', colour=0x7289da, timestamp=datetime.datetime.utcnow())
                         for cfgkey in serverlistmodule[args[0]]["config"]:
-                            embed.add_field(name='**' + cfgkey + '**', value='**Description** : ' + serverlistmodule[args[0]]["config"][cfgkey]["description"][lang] + '\n**Value** (' + serverlistmodule[args[0]]["config"][cfgkey]["type"] + '): ' + serverlistmodule[args[0]]["config"][cfgkey]["value"], inline=False)
+                            embed.add_field(name='**' + cfgkey + '**', value='**Description** : ' + self.locales[lang][args[0]]['config'][cfgkey] + '\n**Value** (' + serverlistmodule[args[0]]["config"][cfgkey]["type"] + '): ' + serverlistmodule[args[0]]["config"][cfgkey]["value"], inline=False)
                         embed.set_footer(text='Usage : !config ' + args[0] + ' <ConfigName> <add/remove/set> <value>')
                         await self.bot.send_message(ctx.message.channel, embed=embed)
                         return
@@ -263,8 +253,8 @@ class Core:
                         try:
                             args[2]
                         except:#no value for configkey
-                            embed = discord.Embed(title=':gear: Module **' + args[0] + '** configuration :', description='Actual configuration.', colour=0x7289da, timestamp=datetime.datetime.utcnow())
-                            embed.add_field(name='**' + args[1] + '**', value='**Description** : ' + serverlistmodule[args[0]]["config"][args[1]]["description"][lang] + '\n**Value** (' + serverlistmodule[args[0]]["config"][args[1]]["type"] + '): ' + serverlistmodule[args[0]]["config"][args[1]]["value"], inline=False)
+                            embed = discord.Embed(title=':gear: Module **' + args[0] + '** configuration :', description=self.locales[lang]['core']['messages']['actualconf'], colour=0x7289da, timestamp=datetime.datetime.utcnow())
+                            embed.add_field(name='**' + args[1] + '**', value='**Description** : ' + self.locales[lang][args[0]]['config'][args[1]] + '\n**Value** (' + serverlistmodule[args[0]]["config"][args[1]]["type"] + '): ' + serverlistmodule[args[0]]["config"][args[1]]["value"], inline=False)
                             if serverlistmodule[args[0]]["config"][args[1]]["type"] == 'bool':
                                 embed.set_footer(text='Usage : !config ' + args[0] + args[1] + ' <ConfigName> <set> <true/false>')
                             else:
@@ -287,7 +277,7 @@ class Core:
                                 except IndexError:
                                     removeConfig('clear', ctx.message.author.server.id, args[0], args[1])
                                 else:
-                                    await self.bot.say('clear option don\t need arguments.')
+                                    await self.bot.say(self.locales[lang]['core']['messages']['clearnoarg'])
                         elif(args[2] == 'add' or args[2] == 'set'):
                             try:
                                 args[3]
@@ -298,8 +288,8 @@ class Core:
                                     #configkey valid ?
                                     serverlistmodule[args[0]]["config"][args[1]]["value"] = args[3]
                                     saveData('server', serverlistmodule, ctx.message.author.server.id)
-                                    embed = discord.Embed(title=':gear: Module **' + args[0] + '** configuration :', description='New configuration saved !', colour=0x00FF00, timestamp=datetime.datetime.utcnow())
-                                    embed.add_field(name='**' + args[1] + '**', value='**Description** : ' + serverlistmodule[args[0]]["config"][args[1]]["description"][lang] + '\n**Value** (' + serverlistmodule[args[0]]["config"][args[1]]["type"] + '): ' + serverlistmodule[args[0]]["config"][args[1]]["value"], inline=False)
+                                    embed = discord.Embed(title=':gear: Module **' + args[0] + '** configuration :', description=self.locales[lang]['core']['messages']['configsaved'], colour=0x00FF00, timestamp=datetime.datetime.utcnow())
+                                    embed.add_field(name='**' + args[1] + '**', value='**Description** : ' + self.locales[lang][args[0]]['config'][args[1]] + '\n**Value** (' + serverlistmodule[args[0]]["config"][args[1]]["type"] + '): ' + serverlistmodule[args[0]]["config"][args[1]]["value"], inline=False)
                                     await self.bot.send_message(ctx.message.channel, embed=embed)
                                 else:#bad value
                                     await self.bot.say('DEBUG : Wrong value !')
@@ -308,12 +298,29 @@ class Core:
                     else:#bad config key
                         await self.bot.say('DEBUG : Bad config key !')
                 else:#module unknown
-                    await self.bot.say('Unknown module **' + args[0] + '**.')
+                    await self.bot.say(self.locales[lang]['core']['messages']['nomodule'].format(args[0]))
             else:#module missing
                 embed = discord.Embed(description=':gear: Module configuration :', colour=0x7289da, timestamp=datetime.datetime.utcnow())
                 embed.add_field(name='Usage :', value='!config <module> <configkey> <add/remove/set/clear> <value>', inline=False)
                 embed.add_field(name='Example :', value='!config welcome message set "Hello and welcome to my awesome server !"', inline=False)
                 await self.bot.send_message(ctx.message.channel, embed=embed)
+
+    @commands.command(pass_context=True)
+    async def checkconfig(self, ctx, *args):
+        if ctx.message.author.id == ctx.message.author.server.owner.id:
+            serverlistmodules = readData('server', ctx.message.author.server.id)
+            lang = serverlistmodules['bot']['config']['lang']['value']
+            if args:
+                for module in args:
+                    if validateModuleName(module):
+                        if checkModuleConfig(module, ctx.message.author.server.id):
+                            await self.bot.say('OK !')
+                        else:
+                            await self.bot.say(self.locales[lang]['core']['messages']['noconfig'])
+                    else:
+                        await self.bot.say(self.locales[lang]['core']['messages']['nomodule'].format(module))
+            else:
+                await self.bot.say(self.locales[lang]['core']['messages']['modulerequired'])
 
 def setup(bot):
     bot.add_cog(Core(bot))

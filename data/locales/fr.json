@@ -1,13 +1,32 @@
 {
   "admin": {
     "config": {
-      "adminlist": "List of user who can use Admin command."
+      "adminlist": "Liste d'utilisateurs pouvant utiliser les commandes d'Administration."
     },
     "commands": "None"
   },
   "bot": {
     "config": {
       "lang": "Bot languages. Can be set to `en` or `fr`."
+    }
+  },
+  "core": {
+    "commands": {
+      "checkconfig": "Vérifie la configuration de modules.",
+      "config": "Modifie la configuration des modules.",
+      "disable": "Désactive un module pour votre serveur.",
+      "enable": "Active un module pour votre serveur."
+    },
+    "messages": {
+      "modulerequired": "Nom de module requis !",
+      "noconfig": "Configuration du module incomplete !",
+      "nomodule": "Module **{0}** inconnu !",
+      "alreadydisabled": "Module **{0}** déjà désactivé.",
+      "alreadyenabled": "Module **{0}** déjà activé.",
+      "noconfigneeded": "Ce module n'a pas besoin de configuration.",
+      "actualconf": "Configuration actuelle.",
+      "clearnoarg": "L'option `clear` n'a pas besoin d'arguments.",
+      "configsaved": "Nouvelle configuration enregistré !"
     }
   },
   "games": {
@@ -28,10 +47,28 @@
   },
   "logging": {
     "config": {
-      "modlog_chan": "Channel defined for posting moderation log message.",
-      "adminlog_chan": "Channel defined for posting administration log message."
+      "modlog_chan": "Salon qui recevra les logs de modérations.",
+      "adminlog_chan": "Salon qui recevra les logs d'administration."
     },
-    "commands": "None"
+    "commands": "None",
+    "messages": {
+      "on_member_ban": "Membre banni : <@{0}>",
+      "on_member_unban": "Membre débanni : <@{0}>",
+      "on_message_edit": "<@{0}> **dans** <#{1}>\n**Avant** : {2}\n**Après** : {3}",
+      "on_message_delete": "<@{0}> **dans** <#{1}>\n**Supprimé** : {2}",
+      "on_reaction_add": "Réaction ajouté (`{0}`) par <@{1}> sur https://discordapp.com/channels/{2}/{3}/{4}",
+      "on_reaction_remove": "Réaction retiré (`{0}`) par <@{1}> sur https://discordapp.com/channels/{2}/{3}/{4}",
+      "on_reaction_clear": "Reaction supprimés sur https://discordapp.com/channels/{2}/{3}/{4} de <@{0}> :\n```{1}```",
+      "on_channel_create": "Salon créé : <#{0}>",
+      "on_channel_delete": "Salon supprimé : #{0}",
+      "on_channel_update": "Salon édité : #{0} -> <#{1}>",
+      "on_member_update": "Pseudo modifié : {0} -> {1}.",
+      "on_member_remove": "Membre parti : #{0}",
+      "on_server_update": "**Server Update**\n```Name : {0.name} -> {1.name}\nTimeout : {0.afk_timeout} -> {1.afk_timeout}\nAfk Channel : {0.afk_channel} -> {1.afk_channel}```",
+      "on_server_role_create": "**Rôle créé**\n```New role : {0}```",
+      "on_server_role_delete": "**Rôle supprimé**\n```Role deleted : {0}```",
+      "on_server_role_update": "**Rôle modifié**\n```{0.name} -> {1.name}```"
+    }
   },
   "misc": {
     "commands": {
@@ -39,11 +76,20 @@
       "roll": "Je lance un dé à 6 faces.",
       "ping": "Pong !",
       "rand": "Random sur base du nombre donné."
+    },
+    "messages": {
+      "flipfail": "Ha ben pas de bol ! La pièce est restée sur la tranche...",
+      "flip1": "Pile !",
+      "flip2": "Face !",
+      "randnoarg": "J'ai besoin de savoir sur quel nombre entier (sans virgule, et pas zéro) je doit baser le random.",
+      "randnozero": "Je ne peut pas faire un random de zéro...",
+      "randone": "Sérieusement ?",
+      "randnotpos": "Nombres entiers positifs uniquement."
     }
   },
   "mod": {
     "config": {
-      "modlist": "List of user who can use Moderator command."
+      "modlist": "Liste d'utilisateurs pouvant utiliser les commandes de Modération."
     },
     "commands": "None"
   },
@@ -51,7 +97,14 @@
     "commands": {
       "poll": "Sondage express."
     },
-    "config": "None"
+    "config": "None",
+    "messages": {
+      "toomanyargs": "Trop d'arguments !",
+      "morethanonechoice": "Il faut plus qu'un choix pour un sondage.",
+      "pollfrom": "Sondage à {0} choix proposé par <@{1}> : ",
+      "votenow": "Votez selon votre choix avec les réactions :one:, :two: ...",
+      "littlepollfrom": "Petit sondage proposé par <@{0}> : "
+    }
   },
   "welcome": {
     "config": {

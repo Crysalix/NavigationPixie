@@ -10,6 +10,25 @@
       "lang": "Bot languages. Can be set to `en` or `fr`."
     }
   },
+  "core": {
+    "commands": {
+      "checkconfig": "Check modules configuration.",
+      "config": "Edit bot modules configuration.",
+      "disable": "Disable bot module for your server.",
+      "enable": "Enable bot module for your server."
+    },
+    "messages": {
+      "modulerequired": "Module name required !",
+      "noconfig": "Incomplete module configuration !",
+      "nomodule": "Unknown module **{0}** !",
+      "alreadydisabled": "Module **{0}** already disabled.",
+      "alreadyenabled": "Module **{0}** already enabled.",
+      "noconfigneeded": "This module don't need configuration.",
+      "actualconf": "Actual configuration.",
+      "clearnoarg": "`clear` option don't need arguments.",
+      "configsaved": "New configuration saved !"
+    }
+  },
   "games": {
     "commands": "None"
   },
@@ -18,7 +37,7 @@
       "rep": "Where to reply to `!help` command. (`pm` for private message or `chan` for the current channel)"
     },
     "commands": {
-      "help": "Affiche ce message."
+      "help": "Show this message."
     }
   },
   "jokes": {
@@ -31,7 +50,25 @@
       "modlog_chan": "Channel defined for posting moderation log message.",
       "adminlog_chan": "Channel defined for posting administration log message."
     },
-    "commands": "None"
+    "commands": "None",
+    "messages": {
+      "on_member_ban": "Member banned : <@{0}>",
+      "on_member_unban": "Member unbanned : <@{0}>",
+      "on_message_edit": "<@{0}> **in** <#{1}>\n**Before** : {2}\n**After** : {3}",
+      "on_message_delete": "<@{0}> **in** <#{1}>\n**Deleted** : {2}",
+      "on_reaction_add": "Reaction added (`{0}`) by <@{1}> on https://discordapp.com/channels/{2}/{3}/{4}",
+      "on_reaction_remove": "Reaction removed (`{0}`) by <@{1}> on https://discordapp.com/channels/{2}/{3}/{4}",
+      "on_reaction_clear": "Reaction Cleared on https://discordapp.com/channels/{2}/{3}/{4} from <@{0}> :\n```{1}```",
+      "on_channel_create": "Channel created : <#{0}>",
+      "on_channel_delete": "Channel deleted : #{0}",
+      "on_channel_update": "Channel updated : #{0} -> <#{1}>",
+      "on_member_update": "Nick update : {0} -> {1}.",
+      "on_member_remove": "Member left : #{0}",
+      "on_server_update": "**Server Update**\n```Name : {0.name} -> {1.name}\nTimeout : {0.afk_timeout} -> {1.afk_timeout}\nAfk Channel : {0.afk_channel} -> {1.afk_channel}```",
+      "on_server_role_create": "**Role created**\n```New role : {0}```",
+      "on_server_role_delete": "**Role deleted**\n```Role deleted : {0}```",
+      "on_server_role_update": "**Role updated**\n```{0.name} -> {1.name}```"
+    }
   },
   "misc": {
     "commands": {
@@ -39,6 +76,15 @@
       "roll": "I roll a six-sided dice.",
       "ping": "Pong !",
       "rand": "Random from given number."
+    },
+    "messages": {
+      "flipfail": "Ha ben pas de bol ! La pièce est restée sur la tranche...",
+      "flip1": "Pile !",
+      "flip2": "Face !",
+      "randnoarg": "J'ai besoin de savoir sur quel nombre entier (sans virgule, et pas zéro) je doit baser le random.",
+      "randnozero": "Je ne peut pas faire un random de zéro...",
+      "randone": "Seriously ?",
+      "randnotpos": "Nombres entiers positifs uniquement."
     }
   },
   "mod": {
@@ -51,7 +97,14 @@
     "commands": {
       "poll": "Submit simple poll."
     },
-    "config": "None"
+    "config": "None",
+    "messages": {
+      "toomanyargs": "Too many args !",
+      "morethanonechoice": "Poll need more than one choice.",
+      "pollfrom": "Poll with {0} choice from <@{1}> : ",
+      "votenow": "Vote now with the emoji :one:, :two: ...",
+      "littlepollfrom": "Little poll submited by <@{0}> : "
+    }
   },
   "welcome": {
     "config": {

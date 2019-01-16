@@ -14,6 +14,7 @@ class Misc:
 
     def __init__(self, bot):
         self.bot = bot
+        self.locales = readData('locales')
 
     def __unload(self):
         pass
@@ -23,9 +24,11 @@ class Misc:
         """Pong !"""
         if ctx.message.author == self.bot.user:
             return
-        serverlistmodule = readData('server', ctx.message.author.server.id)
-        if serverlistmodule["misc"]["last"] == "disabled":
+        serverlistmodules = readData('server', ctx.message.author.server.id)
+        if serverlistmodules["misc"]["last"] == "disabled":
             return
+        await self.bot.send_typing(ctx.message.channel)
+        await asyncio.sleep(0.5)
         await self.bot.say('Pong !')
 
     @commands.command(pass_context=True)
@@ -54,11 +57,12 @@ class Misc:
     @commands.command(pass_context=True)
     async def flip(self, ctx):
         fail = random.randrange(100)
-        serverlistmodule = readData('server', ctx.message.author.server.id)
-        if serverlistmodule["misc"]["last"] == "disabled":
+        serverlistmodules = readData('server', ctx.message.author.server.id)
+        if serverlistmodules["misc"]["last"] == "disabled":
             return
+        lang = serverlistmodules['bot']['config']['lang']['value']
         if fail == 0:
-            await self.bot.say('Ha ben pas de bol ! La pièce est restée sur la tranche...')
+            await self.bot.say(self.locales[lang]['misc']['messages']['flipfail'])
         else:
             i = random.randrange(2)
             if i == 0:
@@ -70,56 +74,58 @@ class Misc:
     async def roll(self, ctx):
         dice = random.randrange(6)
         dice += 1
-        serverlistmodule = readData('server', ctx.message.author.server.id)
-        if serverlistmodule["misc"]["last"] == "disabled":
+        serverlistmodules = readData('server', ctx.message.author.server.id)
+        if serverlistmodules["misc"]["last"] == "disabled":
             return
         await self.bot.say(dice)
 
     @commands.command(pass_context=True)
     async def rand(self, ctx, args0 = None):
-        serverlistmodule = readData('server', ctx.message.author.server.id)
-        if serverlistmodule["misc"]["last"] == "disabled":
+        serverlistmodules = readData('server', ctx.message.author.server.id)
+        if serverlistmodules["misc"]["last"] == "disabled":
             return
+        lang = serverlistmodules['bot']['config']['lang']['value']
         try:
             ran = int(args0)
         except TypeError:#no arg specified
-            await self.bot.say('J\'ai besoin de savoir sur quel nombre entier (sans virgule, et pas zéro) je doit baser le random.')
+            await self.bot.say(self.locales[lang]['misc']['messages']['randnoarg'])
         except ValueError:#not an int
-            await self.bot.say('J\'ai besoin de savoir sur quel nombre entier (sans virgule, et pas zéro) je doit baser le random.')
+            await self.bot.say(self.locales[lang]['misc']['messages']['randnoarg'])
         else:
             if ran == 0:
-                await self.bot.say('Je ne peut pas faire un random de zéro...')
+                await self.bot.say(self.locales[lang]['misc']['messages']['randnozero'])
             elif ran == 1:
-                await self.bot.say('Sérieusement ?')
+                await self.bot.say(self.locales[lang]['misc']['messages']['randone'])
             else:
                 try:
                     rand = random.randrange(ran)
                 except ValueError:
-                    await self.bot.say('Nombres entiers positifs uniquement.')
+                    await self.bot.say(self.locales[lang]['misc']['messages']['randnotpos'])
                 else:
                     rand += 1
                     await self.bot.say(rand)
 
     @commands.command(pass_context=True)
     async def ck(self, ctx):
-        rand = random.randrange(7)
-        serverlistmodule = readData('server', ctx.message.author.server.id)
-        if serverlistmodule["misc"]["last"] == "disabled":
-            return
-        if rand == 0:
-            await self.bot.say('-tastrophique !')
-        if rand == 1:
-            await self.bot.say('-rément n\'importe quoi !')
-        if rand == 2:
-            await self.bot.say('-do !')
-        if rand == 3:
-            await self.bot.say('-ptivant !')
-        if rand == 4:
-            await self.bot.say('-ssé !')
-        if rand == 5:
-            await self.bot.say('-otique !')
-        if rand == 6:
-            await self.bot.say('-rricatural !')
+        if ctx.message.author.id == cfg.bot_ownerid:
+            rand = random.randrange(7)
+            serverlistmodules = readData('server', ctx.message.author.server.id)
+            if serverlistmodules["misc"]["last"] == "disabled":
+                return
+            if rand == 0:
+                await self.bot.say('-tastrophique !')
+            if rand == 1:
+                await self.bot.say('-rément n\'importe quoi !')
+            if rand == 2:
+                await self.bot.say('-do !')
+            if rand == 3:
+                await self.bot.say('-ptivant !')
+            if rand == 4:
+                await self.bot.say('-ssé !')
+            if rand == 5:
+                await self.bot.say('-otique !')
+            if rand == 6:
+                await self.bot.say('-rricatural !')
 
     @commands.command(pass_context=True)
     async def say(self, ctx):
