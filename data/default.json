@@ -2,10 +2,6 @@
     "bot": {
 		"config": {
 			"lang": {
-                "description": {
-                    "en": "Bot languages. Can be set to `en` or `fr`.",
-                    "fr": "Bot languages. Can be set to `en` or `fr`."
-                },
                 "type": "str",
                 "validate": "en/fr",
                 "value": "en"
@@ -13,21 +9,12 @@
 		}
     },
     "welcome": {
-        "commands": "None",
 		"config": {
 			"message": {
-                "description": {
-                    "en": "Message posted when a user join the server.",
-                    "fr": "Message posté quand un utilisateur rejoint le serveur."
-                },
                 "type": "str",
                 "value": "Welcome to my awesome server !"
             },
 			"channel": {
-                "description": {
-                    "en": "The channel where the messages are posted.",
-                    "fr": "Le cannal où les messages sont envoyé."
-                },
                 "type": "tag",
                 "value": "None"
             }
@@ -36,68 +23,29 @@
         "default": "disabled"
     },
     "help": {
-        "commands": {
-            "help": {
-                "en": "Show this message.",
-                "fr": "Affiche ce message."
-            }
-        },
 		"config": {
 			"rep": {
-                "description": {
-                    "en": "Where to reply to `!help` command. (`pm` for private message or `chan` for the current channel)",
-                    "fr": "Où répondre à la commande `!help`. (`pm` pour message privé ou `chan` pour le cannal actuel)"
-                },
                 "type": "str",
                 "validate": "pm/channel",
                 "value": "chan"
             }
 		},
-        "last": "enabled",
-        "default": "enabled"
+        "last": "global",
+        "default": "global"
     },
     "poll": {
-        "commands": {
-            "poll": {
-                "en": "Submit simple poll.",
-                "fr": "Sondage express."
-            }
-        },
         "config": "None",
         "last": "enabled",
         "default": "enabled"
     },
     "misc": {
-        "commands":{
-            "flip": {
-                "en": "Heads or tails ?",
-                "fr": "Pile ou face ?"
-            },
-            "ping": {
-                "en": "Pong !",
-                "fr": "Pong !"
-            },
-            "rand": {
-                "en": "Random from given number.",
-                "fr": "Random sur base du nombre donné."
-            },
-            "roll": {
-                "en": "I roll a six-sided dice.",
-                "fr": "Je lance un dé à 6 faces."
-            }
-        },
         "config": "None",
         "last": "enabled",
         "default": "enabled"
     },
     "admin": {
-        "commands": "None",
 		"config": {
 			"adminlist": {
-                "description": {
-                    "en": "List of user who can use Admin command.",
-                    "fr": "List of user who can use Admin command."
-                },
                 "type": "tag",
                 "value": "None"
             }
@@ -106,13 +54,8 @@
         "default": "disabled"
     },
     "mod": {
-        "commands": "None",
 		"config": {
 			"modlist": {
-                "description": {
-                    "en": "List of user who can use Moderator command.",
-                    "fr": "List of user who can use Moderator command."
-                },
                 "type": "tag",
                 "value": "None"
             }
@@ -121,38 +64,22 @@
         "default": "disabled"
     },
     "jokes": {
-        "commands": {
-            "jokes": {
-                "en": "I tell a joke.",
-                "fr": "Je raconte une blague."
-            }
-        },
         "config": "None",
         "last": "disabled",
         "default": "disabled"
     },
     "games": {
-        "commands": "None",
         "config": "None",
-        "last": "enabled",
-        "default": "enabled"
+        "last": "global",
+        "default": "global"
     },
     "logging": {
-        "commands": "None",
 		"config": {
 			"modlog_chan": {
-                "description": {
-                    "en": "Channel defined for posting moderation log message.",
-                    "fr": "Channel defined for posting moderation log message."
-                },
                 "type": "tag",
                 "value": "None"
             },
 			"adminlog_chan": {
-                "description": {
-                    "en": "Channel defined for posting administration log message.",
-                    "fr": "Channel defined for posting administration log message."
-                },
                 "type": "tag",
                 "value": "None"
             }

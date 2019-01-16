@@ -23,6 +23,7 @@
       "nomodule": "Unknown module **{0}** !",
       "alreadydisabled": "Module **{0}** already disabled.",
       "alreadyenabled": "Module **{0}** already enabled.",
+      "noenabledisable": "Global module can't be enabled/disabled !",
       "noconfigneeded": "This module don't need configuration.",
       "actualconf": "Actual configuration.",
       "clearnoarg": "`clear` option don't need arguments.",

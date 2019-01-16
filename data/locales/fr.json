@@ -23,6 +23,7 @@
       "nomodule": "Module **{0}** inconnu !",
       "alreadydisabled": "Module **{0}** déjà désactivé.",
       "alreadyenabled": "Module **{0}** déjà activé.",
+      "noenabledisable": "Un module Global ne peut être activé/désactivé.",
       "noconfigneeded": "Ce module n'a pas besoin de configuration.",
       "actualconf": "Configuration actuelle.",
       "clearnoarg": "L'option `clear` n'a pas besoin d'arguments.",

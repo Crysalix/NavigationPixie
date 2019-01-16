@@ -73,7 +73,7 @@ async def on_ready():
             sys.exit()
     #Loading modules
     for module in listmodules:
-        if listmodules[module]["default"] == "loaded":
+        if (listmodules[module]["default"] == "loaded" or listmodules[module]["default"] == "global"):
             try:
                 bot.load_extension('module_' + module)
             except ImportError:

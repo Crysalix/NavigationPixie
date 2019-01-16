@@ -153,7 +153,9 @@ class Core:
                     except KeyError:
                         await self.bot.say(self.locales[lang]['core']['messages']['nomodule'].format(module))
                     else:
-                        if serverlistmodules[module]["last"] == "enabled":
+                        if serverlistmodules[module]["default"] == "global":
+                            await self.bot.say(self.locales[lang]['core']['messages']['noenabledisable'])
+                        elif serverlistmodules[module]["last"] == "enabled":
                             await self.bot.say(self.locales[lang]['core']['messages']['alreadyenabled'].format(module))
                         elif checkModuleConfig(module, ctx.message.author.server.id):
                             serverlistmodules[module]["last"] = "enabled"
@@ -180,7 +182,9 @@ class Core:
                     except KeyError:
                         await self.bot.say(self.locales[lang]['core']['messages']['nomodule'].format(module))
                     else:
-                        if serverlistmodules[module]["last"] == "disabled":
+                        if serverlistmodules[module]["default"] == "global":
+                            await self.bot.say(self.locales[lang]['core']['messages']['noenabledisable'])
+                        elif serverlistmodules[module]["last"] == "disabled":
                             await self.bot.say(self.locales[lang]['core']['messages']['alreadydisabled'].format(module))
                         else:
                             serverlistmodules[module]["last"] = "disabled"
@@ -208,17 +212,19 @@ class Core:
                 await self.bot.send_message(ctx.message.channel, embed=embed)
             if ctx.message.author.id == ctx.message.author.server.owner.id:
                 embed = discord.Embed(description=':gear: Module list :', colour=0x7289da, timestamp=datetime.datetime.utcnow())
-                legend = ':white_check_mark:>Enabled :x:>Disabled :no_entry:>Unavailable'
+                legend = 'Legend :\n:white_check_mark:>Enabled :x:>Disabled\n:no_entry:>Unavailable :globe_with_meridians:>Global'
                 status = ''
                 for module in serverlistmodules:
                     if module != "bot":
                         if listmodules[module]["last"] == 'unloaded':
                             status = status + ':no_entry: **' + module + '**\n'
+                        elif serverlistmodules[module]["last"] == 'global':
+                            status = status + ':globe_with_meridians: **' + module + '**\n'
                         elif serverlistmodules[module]["last"] == 'enabled':
                             status = status + ':white_check_mark: **' + module + '**\n'
                         else:
                             status = status + ':x: **' + module + '**\n'
-                embed.add_field(name=legend, value=status, inline=False)
+                embed.add_field(name=status, value=legend, inline=False)
                 await self.bot.send_message(ctx.message.channel, embed=embed)
     
     #MODULE CONFIGURATION COMMAND
