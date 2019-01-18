@@ -68,6 +68,7 @@ async def on_ready():
     except SyntaxError:
         if module == 'core':
             await bot.send_message(bot.get_channel(cfg.botlog_chan), '<@' + cfg.bot_ownerid + '> Syntax error on core module ! Can\'t init bot instance !')
+            await self.bot.say('```py\n%s\n```' % traceback.format_exc())
             logging.error('NAVIGATIONPIXIE > Syntax error on core module ! Can\'t init bot instance !')
             await bot.close()
             sys.exit()
@@ -77,10 +78,10 @@ async def on_ready():
             try:
                 bot.load_extension('modules.' + module)
             except ImportError:
-                await bot.send_message(bot.get_channel(cfg.botlog_chan), '```' + traceback.format_exc() + '```')
+                await bot.send_message(bot.get_channel(cfg.botlog_chan), '```py\n%s\n```' % traceback.format_exc())
                 logging.error('NAVIGATIONPIXIE > Failed to load module ' + module + '.')
             except SyntaxError:
-                await bot.send_message(bot.get_channel(cfg.botlog_chan), '```' + traceback.format_exc() + '```')
+                await bot.send_message(bot.get_channel(cfg.botlog_chan), '```py\n%s\n```' % traceback.format_exc())
                 logging.warning('NAVIGATIONPIXIE > Bad module : ' + module)
     await bot.send_message(bot.get_channel(cfg.botlog_chan), 'Ready !')
     logging.info('NAVIGATIONPIXIE > Connected !')

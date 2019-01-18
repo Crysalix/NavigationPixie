@@ -112,6 +112,9 @@ class Core:
                                 await self.bot.say('Bad module **' + module + '**.')
                                 break
                             await self.bot.say('Done !')
+                        else:
+                            await self.bot.say('Module {0} is not loaded.'.format(module))
+                            #await self.bot.say(self.locales[lang]['core']['messages']['notloaded'].format(module))
                     except KeyError:
                         await self.bot.say('Unknown module **' + module + '**.')
             else:
