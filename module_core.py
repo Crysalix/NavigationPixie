@@ -269,7 +269,7 @@ class Core:
                         if(action == 'remove' or action == 'clear'):
                             if action == 'remove':
                                 #canRemove ?
-                                if (serverlistmodule[module]["config"][configKey]["type"] == 'chantag' or serverlistmodule[module]["config"][configKey]["type"] == 'usertag'):
+                                if (serverlistmodule[module]["config"][configKey]["type"] == 'chantaglist' or serverlistmodule[module]["config"][configKey]["type"] == 'usertaglist'):
                                     try:
                                         args[3]
                                     except IndexError:
@@ -295,7 +295,7 @@ class Core:
                                     await self.bot.say(self.locales[lang]['core']['messages']['clearnoarg'])
                         elif(action == 'add' or action == 'set'):
                             if action == 'add':
-                                if (serverlistmodule[module]["config"][configKey]["type"] == 'chantag' or serverlistmodule[module]["config"][configKey]["type"] == 'usertag'):
+                                if (serverlistmodule[module]["config"][configKey]["type"] == 'chantaglist' or serverlistmodule[module]["config"][configKey]["type"] == 'usertaglist'):
                                     try:
                                         args[3]
                                     except IndexError:
