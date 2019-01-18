@@ -59,7 +59,7 @@ async def on_ready():
     await bot.send_message(bot.get_channel(cfg.botlog_chan), 'Connected ! Loading modules...')
     #Loading core module first
     try:
-        bot.load_extension('module_core')
+        bot.load_extension('modules.core')
     except ImportError:
         await bot.send_message(bot.get_channel(cfg.botlog_chan), '<@' + cfg.bot_ownerid + '> Failed to load core module ! Can\'t init bot instance !')
         logging.error('NAVIGATIONPIXIE > Failed to load core module ! Can\'t init bot instance !')
@@ -75,7 +75,7 @@ async def on_ready():
     for module in listmodules:
         if (listmodules[module]["default"] == "loaded" or listmodules[module]["default"] == "global"):
             try:
-                bot.load_extension('module_' + module)
+                bot.load_extension('modules.' + module)
             except ImportError:
                 await bot.send_message(bot.get_channel(cfg.botlog_chan), '```' + traceback.format_exc() + '```')
                 logging.error('NAVIGATIONPIXIE > Failed to load module ' + module + '.')

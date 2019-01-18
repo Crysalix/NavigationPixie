@@ -47,18 +47,13 @@ class Core:
                         else:
                             res = checkModule(module)
                             if res.returncode != 0:
-                                await self.bot.say('```py' + str(res.stderr.decode().strip()) + '```')
+                                await self.bot.say('```py\n' + str(res.stderr.decode().strip()) + '```')
                             else:
                                 try:
-                                    self.bot.load_extension('module_' + module)
+                                    self.bot.load_extension('modules.' + module)
                                 except ImportError:
                                     await self.bot.say('Failed to load module **' + module + '**.')
-                                except SyntaxError:
-                                    await self.bot.say('```py\n%s\n```' % traceback.format_exc())
-                                except NameError:
-                                    await self.bot.say('```py\n%s\n```' % traceback.format_exc())
-                                    self.bot.unload_extension('module_' + module)
-                                except discord.ClientException:
+                                except:
                                     await self.bot.say('```py\n%s\n```' % traceback.format_exc())
                                 else:
                                     listmodules[module]["last"] = "loaded"
@@ -82,7 +77,7 @@ class Core:
                         elif listmodules[module]["last"] == "unloaded":
                             await self.bot.say('Module **' + module + '** already unloaded.')
                         else:
-                            self.bot.unload_extension('module_' + module)
+                            self.bot.unload_extension('modules.' + module)
                             listmodules[module]["last"] = "unloaded"
                             await self.bot.say('Done !')
                     except KeyError:
@@ -103,9 +98,9 @@ class Core:
                         if res.returncode != 0:
                             await self.bot.say('```py\n' + str(res.stderr.decode().strip()) + '```')
                         elif (module == "core" or listmodules[module]["last"] == "loaded"):
-                            self.bot.unload_extension('module_' + module)
+                            self.bot.unload_extension('modules.' + module)
                             try:
-                                self.bot.load_extension('module_' + module)
+                                self.bot.load_extension('modules.' + module)
                             except ImportError:
                                 if module != "core":
                                     listmodules[module]["last"] = "unloaded"
@@ -122,9 +117,9 @@ class Core:
             else:
                 for module in listmodules:
                     if listmodules[module]["last"] == "loaded":
-                        self.bot.unload_extension('module_' + module)
+                        self.bot.unload_extension('modules.' + module)
                         try:
-                            self.bot.load_extension('module_' + module)
+                            self.bot.load_extension('modules.' + module)
                         except ImportError:
                             if module != "core":
                                 listmodules[module]["last"] = "unloaded"

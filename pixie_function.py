@@ -20,7 +20,7 @@ def isEnabled(module, id):
         return False
 
 def checkModule(module):
-    res = subprocess.run(['python3.5', '-m', 'py_compile', 'module_' + module + '.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    res = subprocess.run(['python3.5', '-m', 'py_compile', 'modules/' + module + '.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     return res
 
 def checkModuleConfig(module, id):
