@@ -104,6 +104,18 @@ class Misc:
                     await self.bot.say(rand)
 
     @commands.command(pass_context=True)
+    async def hey(self, ctx):
+        serverlistmodules = readData('server', ctx.message.author.server.id)
+        if serverlistmodules["misc"]["last"] == "enabled":
+            rand = random.randrange(3)
+            if rand == 0:
+                await self.bot.say('Listen !')
+            if rand == 1:
+                await self.bot.say('Hooo')
+            if rand == 2:
+                await self.bot.say('<@{}> Wake up !'.format(ctx.message.author.id))
+
+    @commands.command(pass_context=True)
     async def ck(self, ctx):
         if ctx.message.author.id == cfg.bot_ownerid:
             rand = random.randrange(7)
