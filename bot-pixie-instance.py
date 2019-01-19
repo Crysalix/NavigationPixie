@@ -3,9 +3,7 @@ import aiohttp
 import asyncio
 import datetime
 import discord
-import json
 import logging
-import random
 import subprocess
 import time
 import traceback
@@ -26,7 +24,6 @@ bot.remove_command('help')
 
 async def keep_running(client, token):
     retry = backoff.ExponentialBackoff()
-    logging.info('DEBUG KEEP RUNNING')
     while True:
         try:
             await client.login(token)
@@ -36,7 +33,6 @@ async def keep_running(client, token):
         else:
             break
     while client.is_logged_in:
-        logging.info('while client.is_logged_in')
         if client.is_closed:
             client._closed.clear()
             client.http.recreate()

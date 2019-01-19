@@ -1,9 +1,7 @@
 #!/usr/bin/env python3.5
 import asyncio
 import discord
-import json
 import random
-import time
 
 import config as cfg
 

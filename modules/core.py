@@ -1,7 +1,6 @@
 #!/usr/bin/env python3.5
 import asyncio
-import json
-import time
+import datetime
 import discord
 import traceback
 

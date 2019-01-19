@@ -1,6 +1,5 @@
 #!/usr/bin/env python3.5
 import asyncio
-import time
 import discord
 
 from discord.ext import commands
