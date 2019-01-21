@@ -45,11 +45,11 @@ def readData(file, id = None, module = None):
         with open('data/locales.json') as e:
             data = json.load(e)
         for lang in data:
-            with open('data/locales/' + lang + '.json') as e:
+            with open('data/locales/{}.json'.format(lang)) as e:
                 data[lang] = json.load(e)
     elif file == 'server':
         try:
-            with open('data/servers/' + id + '.json') as e:
+            with open('data/servers/{}.json'.format(id)) as e:
                 data = json.load(e)
         except:
             with open('data/default.json') as e:
@@ -80,7 +80,7 @@ def saveData(file, data, id = None):
     elif file == 'server':
         if id == None:
             return
-        with open('data/servers/' + id + '.json', 'w') as e:
+        with open('data/servers/{}.json'.format(id), 'w') as e:
             json.dump(data, e)
 
 def getDefault():

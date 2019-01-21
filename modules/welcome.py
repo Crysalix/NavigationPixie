@@ -14,19 +14,19 @@ class Welcome:
         pass
 
     async def on_member_join(self, member):
-        serverlistmodules = readData('server', member.server.id)
+        serverlistmodules = readData('server', member.guild.id)
         if serverlistmodules["welcome"]["last"] == "enabled":
             fmt = serverlistmodules['welcome']['config']['message']['value']
             channel = str(''.join(filter(str.isdigit, serverlistmodules['welcome']['config']['channel']['value'])))
-            member.id = '<@' + member.id + '>'
-            await self.bot.send_message(self.bot.get_channel(channel), fmt.format(user=member.id))
+            userid = '<@{}>'.format(member.id)
+            await self.bot.get_channel(int(channel)).send(fmt.format(user=userid))
 
     async def on_member_remove(self, member):
-        serverlistmodules = readData('server', member.server.id)
+        serverlistmodules = readData('server', member.guild.id)
         if serverlistmodules["welcome"]["last"] == "enabled":
             fmt = '{user} nous a quitté. :wave:'
             channel = str(''.join(filter(str.isdigit, serverlistmodules['welcome']['config']['channel']['value'])))
-            await self.bot.send_message(self.bot.get_channel(channel), fmt.format(user=member.name))
+            await self.bot.get_channel(int(channel)).send(fmt.format(user=member.name))
 
 def setup(bot):
     bot.add_cog(Welcome(bot))

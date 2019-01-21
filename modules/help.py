@@ -21,8 +21,9 @@ class Help:
     async def help(self, ctx):
         """Help message generator."""
         listmodules = readData('main')
-        serverlistmodules = readData('server', ctx.message.author.server.id)
+        serverlistmodules = readData('server', ctx.message.author.guild.id)
         lang = serverlistmodules['bot']['config']['lang']['value']
+        chan = ctx.message.channel
         if ctx.message.author == self.bot.user:
             return
         # botmaster help command
@@ -33,15 +34,15 @@ class Help:
             embed.add_field(name='!reload', value='Reload given bot modules or all.', inline=False)
             embed.add_field(name='!checkmodule', value='Check modules parsing.', inline=False)
             embed.add_field(name='!quit', value='Close connexion and stop bot instance.', inline=False)
-            await self.bot.send_message(ctx.message.channel, embed=embed)
+            await chan.send(embed=embed)
         # server admin help command
-        if ctx.message.author.id == ctx.message.author.server.owner.id:
+        if ctx.message.author.id == ctx.message.author.guild.owner.id:
             embed = discord.Embed(description=':gear: Admin Commands list :', colour=0x7289da, timestamp=datetime.datetime.utcnow())
             embed.add_field(name='!enable', value=self.locales[lang]['core']['commands']['enable'], inline=False)
             embed.add_field(name='!disable', value=self.locales[lang]['core']['commands']['disable'], inline=False)
             embed.add_field(name='!config', value=self.locales[lang]['core']['commands']['config'], inline=False)
             embed.add_field(name='!checkconfig', value=self.locales[lang]['core']['commands']['checkconfig'], inline=False)
-            await self.bot.send_message(ctx.message.channel, embed=embed)
+            await chan.send(embed=embed)
         # admin/mod help command
         # regular help command
         embed = discord.Embed(description=':gear: Commands list :', colour=0x7289da, timestamp=datetime.datetime.utcnow())
@@ -56,7 +57,7 @@ class Help:
             embed.add_field(name='!joke', value=self.locales[lang]['jokes']['commands']['joke'], inline=False)
         if (listmodules["poll"]["last"] == "loaded" and serverlistmodules["poll"]["last"] == "enabled"):
             embed.add_field(name='!poll', value=self.locales[lang]['poll']['commands']['poll'], inline=False)
-        await self.bot.send_message(ctx.message.channel, embed=embed)
+        await chan.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(Help(bot))

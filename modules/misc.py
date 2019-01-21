@@ -20,18 +20,19 @@ class Misc:
     @commands.command(pass_context=True)
     async def ping(self, ctx):
         """Pong !"""
-        if ctx.message.author == self.bot.user:
-            return
-        serverlistmodules = readData('server', ctx.message.author.server.id)
-        if serverlistmodules["misc"]["last"] == "disabled":
-            return
-        await self.bot.send_typing(ctx.message.channel)
-        await asyncio.sleep(0.5)
-        await self.bot.say('Pong !')
+        # if ctx.message.author == self.bot.user:
+            # return
+        serverlistmodules = readData('server', ctx.message.author.guild.id)
+        if serverlistmodules["misc"]["last"] == "enabled":
+            chan = ctx.message.channel
+            async with chan.typing():
+                await asyncio.sleep(0.5)
+                await chan.send('Pong !')
 
     @commands.command(pass_context=True)
     async def excuse(self, ctx, rand=1):
         if ctx.message.author.id == cfg.bot_ownerid:
+            chan = ctx.message.channel
             count=0
             msg=''
             while True:
@@ -50,98 +51,100 @@ class Misc:
                 count +=1
                 if count == rand:
                     break
-            await self.bot.say('**Excuses :** ' + msg)
+            await chan.send('**Excuses :** ' + msg)
 
     @commands.command(pass_context=True)
     async def flip(self, ctx):
         fail = random.randrange(100)
-        serverlistmodules = readData('server', ctx.message.author.server.id)
-        if serverlistmodules["misc"]["last"] == "disabled":
-            return
-        lang = serverlistmodules['bot']['config']['lang']['value']
-        if fail == 0:
-            await self.bot.say(self.locales[lang]['misc']['messages']['flipfail'])
-        else:
-            i = random.randrange(2)
-            if i == 0:
-                await self.bot.say('Pile !')
-            elif i == 1:
-                await self.bot.say('Face !')
+        serverlistmodules = readData('server', ctx.message.author.guild.id)
+        if serverlistmodules["misc"]["last"] == "enabled":
+            lang = serverlistmodules['bot']['config']['lang']['value']
+            chan = ctx.message.channel
+            if fail == 0:
+                await chan.send(self.locales[lang]['misc']['messages']['flipfail'])
+            else:
+                i = random.randrange(2)
+                if i == 0:
+                    await chan.send('Pile !')
+                elif i == 1:
+                    await chan.send('Face !')
 
     @commands.command(pass_context=True)
     async def roll(self, ctx):
         dice = random.randrange(6)
         dice += 1
-        serverlistmodules = readData('server', ctx.message.author.server.id)
-        if serverlistmodules["misc"]["last"] == "disabled":
-            return
-        await self.bot.say(dice)
+        serverlistmodules = readData('server', ctx.message.author.guild.id)
+        if serverlistmodules["misc"]["last"] == "enabled":
+            chan = ctx.message.channel
+            await chan.send(dice)
 
     @commands.command(pass_context=True)
     async def rand(self, ctx, args0 = None):
-        serverlistmodules = readData('server', ctx.message.author.server.id)
-        if serverlistmodules["misc"]["last"] == "disabled":
-            return
-        lang = serverlistmodules['bot']['config']['lang']['value']
-        try:
-            ran = int(args0)
-        except TypeError:#no arg specified
-            await self.bot.say(self.locales[lang]['misc']['messages']['randnoarg'])
-        except ValueError:#not an int
-            await self.bot.say(self.locales[lang]['misc']['messages']['randnoarg'])
-        else:
-            if ran == 0:
-                await self.bot.say(self.locales[lang]['misc']['messages']['randnozero'])
-            elif ran == 1:
-                await self.bot.say(self.locales[lang]['misc']['messages']['randone'])
+        serverlistmodules = readData('server', ctx.message.author.guild.id)
+        if serverlistmodules["misc"]["last"] == "enabled":
+            lang = serverlistmodules['bot']['config']['lang']['value']
+            chan = ctx.message.channel
+            try:
+                ran = int(args0)
+            except TypeError:#no arg specified
+                await chan.send(self.locales[lang]['misc']['messages']['randnoarg'])
+            except ValueError:#not an int
+                await chan.send(self.locales[lang]['misc']['messages']['randnoarg'])
             else:
-                try:
-                    rand = random.randrange(ran)
-                except ValueError:
-                    await self.bot.say(self.locales[lang]['misc']['messages']['randnotpos'])
+                if ran == 0:
+                    await chan.send(self.locales[lang]['misc']['messages']['randnozero'])
+                elif ran == 1:
+                    await chan.send(self.locales[lang]['misc']['messages']['randone'])
                 else:
-                    rand += 1
-                    await self.bot.say(rand)
+                    try:
+                        rand = random.randrange(ran)
+                    except ValueError:
+                        await chan.send(self.locales[lang]['misc']['messages']['randnotpos'])
+                    else:
+                        rand += 1
+                        await chan.send(rand)
 
     @commands.command(pass_context=True)
     async def hey(self, ctx):
-        serverlistmodules = readData('server', ctx.message.author.server.id)
+        serverlistmodules = readData('server', ctx.message.author.guild.id)
         if serverlistmodules["misc"]["last"] == "enabled":
             rand = random.randrange(3)
+            chan = ctx.message.channel
             if rand == 0:
-                await self.bot.say('Listen !')
+                await chan.send('Listen !')
             if rand == 1:
-                await self.bot.say('Hooo')
+                await chan.send('Hooo')
             if rand == 2:
-                await self.bot.say('<@{}> Wake up !'.format(ctx.message.author.id))
+                await chan.send('<@{}> Wake up !'.format(ctx.message.author.id))
 
     @commands.command(pass_context=True)
     async def ck(self, ctx):
         if ctx.message.author.id == cfg.bot_ownerid:
             rand = random.randrange(7)
-            serverlistmodules = readData('server', ctx.message.author.server.id)
-            if serverlistmodules["misc"]["last"] == "disabled":
-                return
-            if rand == 0:
-                await self.bot.say('-tastrophique !')
-            if rand == 1:
-                await self.bot.say('-rément n\'importe quoi !')
-            if rand == 2:
-                await self.bot.say('-do !')
-            if rand == 3:
-                await self.bot.say('-ptivant !')
-            if rand == 4:
-                await self.bot.say('-ssé !')
-            if rand == 5:
-                await self.bot.say('-otique !')
-            if rand == 6:
-                await self.bot.say('-rricatural !')
+            serverlistmodules = readData('server', ctx.message.author.guild.id)
+            if serverlistmodules["misc"]["last"] == "enabled":
+                chan = ctx.message.channel
+                if rand == 0:
+                    await chan.send('-tastrophique !')
+                if rand == 1:
+                    await chan.send('-rément n\'importe quoi !')
+                if rand == 2:
+                    await chan.send('-do !')
+                if rand == 3:
+                    await chan.send('-ptivant !')
+                if rand == 4:
+                    await chan.send('-ssé !')
+                if rand == 5:
+                    await chan.send('-otique !')
+                if rand == 6:
+                    await chan.send('-rricatural !')
 
     @commands.command(pass_context=True)
     async def say(self, ctx):
         if ctx.message.author.id == cfg.bot_ownerid:
             msg = ctx.message.content.split(" ", 1)[1]
-            await self.bot.say(msg)
+            chan = ctx.message.channel
+            await chan.send(msg)
 
 def setup(bot):
     bot.add_cog(Misc(bot))
