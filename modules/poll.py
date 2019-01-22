@@ -16,7 +16,7 @@ class Poll:
     def __unload(self):
         pass
 
-    @commands.command(pass_context=True)
+    @commands.command()
     async def poll(self, ctx, *args):
         """Submiting simple poll in a easy way"""
         if isEnabled('poll', ctx.message.author.guild.id):

@@ -17,7 +17,7 @@ class Help:
     def __unload(self):
         pass
 
-    @commands.command(pass_context=True)
+    @commands.command()
     async def help(self, ctx):
         """Help message generator."""
         listmodules = readData('main')

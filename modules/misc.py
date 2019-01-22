@@ -17,7 +17,7 @@ class Misc:
     def __unload(self):
         pass
 
-    @commands.command(pass_context=True)
+    @commands.command()
     async def ping(self, ctx):
         """Pong !"""
         # if ctx.message.author == self.bot.user:
@@ -29,7 +29,7 @@ class Misc:
                 await asyncio.sleep(0.5)
                 await chan.send('Pong !')
 
-    @commands.command(pass_context=True)
+    @commands.command()
     async def excuse(self, ctx, rand=1):
         if ctx.message.author.id == cfg.bot_ownerid:
             chan = ctx.message.channel
@@ -53,7 +53,7 @@ class Misc:
                     break
             await chan.send('**Excuses :** ' + msg)
 
-    @commands.command(pass_context=True)
+    @commands.command()
     async def flip(self, ctx):
         fail = random.randrange(100)
         serverlistmodules = readData('server', ctx.message.author.guild.id)
@@ -69,7 +69,7 @@ class Misc:
                 elif i == 1:
                     await chan.send('Face !')
 
-    @commands.command(pass_context=True)
+    @commands.command()
     async def roll(self, ctx):
         dice = random.randrange(6)
         dice += 1
@@ -78,7 +78,7 @@ class Misc:
             chan = ctx.message.channel
             await chan.send(dice)
 
-    @commands.command(pass_context=True)
+    @commands.command()
     async def rand(self, ctx, args0 = None):
         serverlistmodules = readData('server', ctx.message.author.guild.id)
         if serverlistmodules["misc"]["last"] == "enabled":
@@ -104,7 +104,7 @@ class Misc:
                         rand += 1
                         await chan.send(rand)
 
-    @commands.command(pass_context=True)
+    @commands.command()
     async def hey(self, ctx):
         serverlistmodules = readData('server', ctx.message.author.guild.id)
         if serverlistmodules["misc"]["last"] == "enabled":
@@ -117,7 +117,7 @@ class Misc:
             if rand == 2:
                 await chan.send('<@{}> Wake up !'.format(ctx.message.author.id))
 
-    @commands.command(pass_context=True)
+    @commands.command()
     async def ck(self, ctx):
         if ctx.message.author.id == cfg.bot_ownerid:
             rand = random.randrange(7)
@@ -139,7 +139,7 @@ class Misc:
                 if rand == 6:
                     await chan.send('-rricatural !')
 
-    @commands.command(pass_context=True)
+    @commands.command()
     async def say(self, ctx):
         if ctx.message.author.id == cfg.bot_ownerid:
             msg = ctx.message.content.split(" ", 1)[1]

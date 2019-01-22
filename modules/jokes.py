@@ -13,7 +13,7 @@ class Jokes:
     def __unload(self):
         pass
 
-    @commands.command(pass_context=True)
+    @commands.command()
     async def joke(self, ctx, i=0):
         """Je raconte une blague."""
         if i == 0:

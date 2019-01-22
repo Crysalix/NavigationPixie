@@ -18,7 +18,7 @@ class Core:
     def __unload(self):
         pass
 
-    @commands.command(pass_context=True)
+    @commands.command()
     async def checkmodule(self, ctx, arg1):
         if ctx.message.author.id == cfg.bot_ownerid:
             if arg1:
@@ -32,7 +32,7 @@ class Core:
                 await chan.send('Module name required !')
 
     #MODULE LOAD/UNLOAD/RELOAD COMMAND (BOTMASTER ONLY)
-    @commands.command(pass_context=True)
+    @commands.command()
     async def load(self, ctx, *args):
         """Load custom bot modules."""
         if ctx.message.author.id == cfg.bot_ownerid:
@@ -65,7 +65,7 @@ class Core:
             else:
                 await chan.send('Missing module name !')
 
-    @commands.command(pass_context=True)
+    @commands.command()
     async def unload(self, ctx, *args):
         """Unload custom bot modules."""
         if ctx.message.author.id == cfg.bot_ownerid:
@@ -88,7 +88,7 @@ class Core:
             else:
                 await chan.send('Missing module name !')
 
-    @commands.command(pass_context=True)
+    @commands.command()
     async def reload(self, ctx, *args):#IMPROVE, KEYERROR NOT RAISED !
         """Reload given bot modules, or all modules."""
         if ctx.message.author.id == cfg.bot_ownerid:
@@ -138,7 +138,7 @@ class Core:
             saveData('main', listmodules)
 
     #MODULE ENABLE/DISABLE COMMAND (SERVERADMIN ONLY)
-    @commands.command(pass_context=True)
+    @commands.command()
     async def enable(self, ctx, *args):
         if ctx.message.author.id == ctx.message.author.guild.owner.id:
             serverlistmodules = readData('server', ctx.message.author.guild.id)
@@ -168,7 +168,7 @@ class Core:
             else:
                 await chan.send(self.locales[lang]['core']['messages']['modulerequired'])
 
-    @commands.command(pass_context=True)
+    @commands.command()
     async def disable(self, ctx, *args):
         if ctx.message.author.id == ctx.message.author.guild.owner.id:
             serverlistmodules = readData('server', ctx.message.author.guild.id)
@@ -197,7 +197,7 @@ class Core:
                 await chan.send(self.locales[lang]['core']['messages']['modulerequired'])
 
     #MODULE LIST VIEWER
-    @commands.command(pass_context=True)
+    @commands.command()
     async def module(self, ctx):
         """Module list generator"""
         if(ctx.message.author.id == cfg.bot_ownerid or ctx.message.author.id == ctx.message.author.guild.owner.id):
@@ -232,7 +232,7 @@ class Core:
                 await chan.send(embed=embed)
     
     #MODULE CONFIGURATION COMMAND
-    @commands.command(pass_context=True)
+    @commands.command()
     async def config(self, ctx, *args):
         """Bot module configuration"""
         if ctx.message.author.id == ctx.message.author.guild.owner.id:
@@ -343,7 +343,7 @@ class Core:
                 embed.add_field(name='Example :', value='!config welcome message set "Hello and welcome to my awesome server !"', inline=False)
                 await chan.send(embed=embed)
 
-    @commands.command(pass_context=True)
+    @commands.command()
     async def checkconfig(self, ctx, *args):
         if ctx.message.author.id == ctx.message.author.guild.owner.id:
             serverlistmodules = readData('server', ctx.message.author.guild.id)
