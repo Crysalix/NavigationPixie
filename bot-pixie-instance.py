@@ -49,19 +49,20 @@ bot.remove_command('help')
 
 @bot.event
 async def on_ready():
+    chan = bot.get_channel(cfg.botlog_chan)
     logging.info('NAVIGATIONPIXIE > Logged in as {} with ID {}'.format(bot.user.name, bot.user.id))
-    await bot.get_channel(cfg.botlog_chan).send('Connected ! Loading modules...')
+    await chan.send('Connected ! Loading modules...')
     #Loading core module first
     try:
         bot.load_extension('modules.core')
     except ImportError:
-        await bot.get_channel(cfg.botlog_chan).send('<@{}> Failed to load core module ! Can\'t init bot instance !'.format(cfg.bot_ownerid))
+        await chan.send('<@{}> Failed to load core module ! Can\'t init bot instance !'.format(cfg.bot_ownerid))
         logging.error('NAVIGATIONPIXIE > Failed to load core module ! Can\'t init bot instance !')
         await bot.close()
         sys.exit()
     except SyntaxError:
         if module == 'core':
-            await bot.get_channel(cfg.botlog_chan).send('<@{}> Syntax error on core module ! Can\'t init bot instance !'.format(cfg.bot_ownerid))
+            await chan.send('<@{}> Syntax error on core module ! Can\'t init bot instance !'.format(cfg.bot_ownerid))
             logging.error('NAVIGATIONPIXIE > Syntax error on core module ! Can\'t init bot instance !')
             await bot.close()
             sys.exit()
@@ -71,12 +72,12 @@ async def on_ready():
             try:
                 bot.load_extension('modules.' + module)
             except ImportError:
-                await bot.get_channel(cfg.botlog_chan).send('```py\n%s\n```' % traceback.format_exc())
-                logging.error('NAVIGATIONPIXIE > Failed to load module ' + module + '.')
+                await chan.send('```py\n%s\n```' % traceback.format_exc())
+                logging.error('NAVIGATIONPIXIE > Failed to load module {}.'.format(module))
             except SyntaxError:
-                await bot.get_channel(cfg.botlog_chan).send('```py\n%s\n```' % traceback.format_exc())
-                logging.warning('NAVIGATIONPIXIE > Bad module : ' + module)
-    await bot.get_channel(cfg.botlog_chan).send('Ready !')
+                await chan.send('```py\n%s\n```' % traceback.format_exc())
+                logging.warning('NAVIGATIONPIXIE > Bad module : {}'.format(module))
+    await chan.send('Ready !')
     logging.info('NAVIGATIONPIXIE > Connected !')
 
 @bot.event
@@ -133,7 +134,7 @@ async def on_message(message):
         return
     if message.content.startswith('!'):
         #logging commands only (including unknown commands)
-        logging.info(message.guild.name + ' > ' + message.content)
+        logging.info('{0.guild.name} > {0.content}'.format(message))
     if bot.user.mentioned_in(message):
         try:
             emoji = get(bot.get_all_emojis(), name='mention')
@@ -143,7 +144,7 @@ async def on_message(message):
     await bot.process_commands(message)
 
 @bot.event
-async def on_guild_join(server):
+async def on_guild_join(guild):
     em = discord.Embed(title=guild.name, type='rich', description='Total : ' + str(len(bot.servers)), colour=0x23d160, timestamp=datetime.datetime.utcnow())
     em.set_author(name='New server joined !', icon_url=guild.icon_url)
     em.set_thumbnail(url=guild.icon_url)
@@ -160,7 +161,7 @@ async def on_guild_join(server):
     await bot.get_channel(cfg.botlog_chan).send(embed=em)
 
 @bot.event
-async def on_guild_remove(server):
+async def on_guild_remove(guild):
     em = discord.Embed(title=guild.name, type='rich', description='Total : ' + str(len(bot.servers)), colour=0xe74c3c, timestamp=datetime.datetime.utcnow())
     em.set_author(name='Server removed !', icon_url=guild.icon_url)
     em.set_thumbnail(url=guild.icon_url)
@@ -173,5 +174,5 @@ async def on_guild_remove(server):
     await bot.get_channel(cfg.botlog_chan).send(embed=em)
 
 logging.basicConfig(format='%(asctime)s | [%(levelname)s] | %(message)s', datefmt='%m/%d/%Y - %H:%M:%S', filename='latest.log',level=logging.INFO)
-bot.run(cfg.token   )
+bot.run(cfg.token)
 # asyncio.get_event_loop().run_until_complete(keep_running(bot, cfg.token))
