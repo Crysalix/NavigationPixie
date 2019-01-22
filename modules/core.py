@@ -221,14 +221,18 @@ class Core:
                 for module in serverlistmodules:
                     if module != "bot":
                         if listmodules[module]["last"] == 'unloaded':
-                            status = status + ':no_entry: **' + module + '**\n'
+                            embed.add_field(name='Module {}'.format(module), value='> :no_entry:', inline=True)
+                            #status = status + ':no_entry: **' + module + '**\n'
                         elif serverlistmodules[module]["last"] == 'global':
-                            status = status + ':globe_with_meridians: **' + module + '**\n'
+                            embed.add_field(name='Module {}'.format(module), value='> :globe_with_meridians:', inline=True)
+                            #status = status + ':globe_with_meridians: **' + module + '**\n'
                         elif serverlistmodules[module]["last"] == 'enabled':
-                            status = status + ':white_check_mark: **' + module + '**\n'
+                            embed.add_field(name='Module {}'.format(module), value='> :white_check_mark:', inline=True)
+                            #status = status + ':white_check_mark: **' + module + '**\n'
                         else:
-                            status = status + ':x: **' + module + '**\n'
-                embed.add_field(name=status, value=legend, inline=False)
+                            embed.add_field(name='Module {}'.format(module), value='> :x:', inline=True)
+                            #status = status + ':x: **' + module + '**\n'
+                #embed.add_field(name=status, value=legend, inline=False)
                 await chan.send(embed=embed)
     
     #MODULE CONFIGURATION COMMAND
