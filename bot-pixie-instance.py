@@ -137,7 +137,7 @@ async def on_message(message):
         logging.info('{0.guild.name} > {0.content}'.format(message))
     if bot.user.mentioned_in(message):
         try:
-            emoji =bot.get_emoji(443086928716496897)
+            emoji = bot.get_emoji(443086928716496897)
             await message.add_reaction(emoji)
         except:
             await bot.get_channel(cfg.botlog_chan).send('```py\n%s\n```' % traceback.format_exc())

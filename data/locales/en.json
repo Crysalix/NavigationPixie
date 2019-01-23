@@ -114,6 +114,12 @@
       "littlepollfrom": "Little poll submited by <@{0}> : "
     }
   },
+  "tools": {
+    "messages": {
+      "guildcount": "Guild count",
+      "membercount": "Member count"
+    }
+  },
   "welcome": {
     "config": {
       "message": "Message posted when a user join the server.",

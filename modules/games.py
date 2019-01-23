@@ -16,9 +16,7 @@ class Games:
                 serverCount = len(self.bot.guilds)
                 memberCount = len(list(self.bot.get_all_members()))
                 name, type = random.choice(list(gameslist.items()))
-                #await self.bot.change_presence(activity=discord.Game(name=randomGame.format(guilds = serverCount, members = memberCount)))
                 await self.bot.change_presence(activity=discord.Activity(type=type, name=name.format(guilds = serverCount, members = memberCount)))
-                #await bot.change_presence(activity=discord.Activity(type=watching, name='Trash Animes'.format(guilds = guildCount, members = memberCount)))
                 await asyncio.sleep(300) # 5 minutes
 
         self.bot = bot
@@ -39,6 +37,11 @@ gameslist = {
     "on {guilds:d} Servers": "2",
     "with {members:d} Members": "0"
 }
+#https://discordapp.com/developers/docs/game-sdk/activities
+# Playing	0
+# Streaming	1
+# Listening	2
+# Watching	3
 
 def setup(bot):
     bot.add_cog(Games(bot))

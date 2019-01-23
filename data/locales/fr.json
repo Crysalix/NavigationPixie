@@ -114,6 +114,12 @@
       "littlepollfrom": "Petit sondage proposé par <@{0}> : "
     }
   },
+  "tools": {
+    "messages": {
+      "guildcount": "Nombre de Serveur",
+      "membercount": "Nombre de Membre"
+    }
+  },
   "welcome": {
     "config": {
       "message": "Message posté quand un utilisateur rejoint le serveur.",
