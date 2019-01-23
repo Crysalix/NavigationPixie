@@ -206,7 +206,7 @@ class Core:
             chan = ctx.message.channel
             if ctx.message.author.id == cfg.bot_ownerid and ctx.message.channel.id == cfg.botlog_chan:
                 embed = discord.Embed(description=':gear: Module list :', colour=0x7289da, timestamp=datetime.datetime.utcnow())
-                for module in listmodules:
+                for module in sorted(listmodules):
                     if module != 'core':
                         try:
                             serverlistmodules[module]["last"]
@@ -216,9 +216,9 @@ class Core:
                 await chan.send(embed=embed)
             if ctx.message.author.id == ctx.message.author.guild.owner.id:
                 embed = discord.Embed(description=':gear: Module list :', colour=0x7289da, timestamp=datetime.datetime.utcnow())
-                legend = 'Legend :\n:white_check_mark:>Enabled :x:>Disabled\n:no_entry:>Unavailable :globe_with_meridians:>Global'
+                legend = ':white_check_mark:>Enabled :x:>Disabled :no_entry:>Unavailable :globe_with_meridians:>Global'
                 status = ''
-                for module in serverlistmodules:
+                for module in sorted(serverlistmodules):
                     if module != "bot":
                         if listmodules[module]["last"] == 'unloaded':
                             embed.add_field(name='Module {}'.format(module), value='> :no_entry:', inline=True)
@@ -232,7 +232,7 @@ class Core:
                         else:
                             embed.add_field(name='Module {}'.format(module), value='> :x:', inline=True)
                             #status = status + ':x: **' + module + '**\n'
-                #embed.add_field(name=status, value=legend, inline=False)
+                embed.add_field(name='Legend :', value=legend, inline=False)
                 await chan.send(embed=embed)
     
     #MODULE CONFIGURATION COMMAND
