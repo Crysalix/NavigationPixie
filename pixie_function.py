@@ -7,7 +7,8 @@ import sys
 import traceback
 
 def isLoaded(module, id):
-    if serverslist[id][module]["last"] == "enabled":#wrong vars
+    botListModules = readData('main')
+    if botListModules[id][module]["last"] == "enabled":
         return True
     else:
         return False

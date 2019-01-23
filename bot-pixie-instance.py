@@ -145,7 +145,7 @@ async def on_message(message):
 
 @bot.event
 async def on_guild_join(guild):
-    em = discord.Embed(title=guild.name, type='rich', description='Total : ' + str(len(bot.servers)), colour=0x23d160, timestamp=datetime.datetime.utcnow())
+    em = discord.Embed(title=guild.name, type='rich', description='Total : {}'.format(str(len(bot.servers))), colour=0x23d160, timestamp=datetime.datetime.utcnow())
     em.set_author(name='New server joined !', icon_url=guild.icon_url)
     em.set_thumbnail(url=guild.icon_url)
     em.add_field(name='ID', value=guild.id)
@@ -162,7 +162,7 @@ async def on_guild_join(guild):
 
 @bot.event
 async def on_guild_remove(guild):
-    em = discord.Embed(title=guild.name, type='rich', description='Total : ' + str(len(bot.servers)), colour=0xe74c3c, timestamp=datetime.datetime.utcnow())
+    em = discord.Embed(title=guild.name, type='rich', description='Total : {}'.format(str(len(bot.servers))), colour=0xe74c3c, timestamp=datetime.datetime.utcnow())
     em.set_author(name='Server removed !', icon_url=guild.icon_url)
     em.set_thumbnail(url=guild.icon_url)
     em.add_field(name='ID', value=guild.id)
