@@ -217,21 +217,16 @@ class Core:
             if ctx.message.author.id == ctx.message.author.guild.owner.id:
                 embed = discord.Embed(description=':gear: Module list :', colour=0x7289da, timestamp=datetime.datetime.utcnow())
                 legend = ':white_check_mark:>Enabled :x:>Disabled :no_entry:>Unavailable :globe_with_meridians:>Global'
-                status = ''
                 for module in sorted(serverlistmodules):
                     if module != "bot":
                         if listmodules[module]["last"] == 'unloaded':
                             embed.add_field(name='Module {}'.format(module), value='> :no_entry:', inline=True)
-                            #status = status + ':no_entry: **' + module + '**\n'
                         elif serverlistmodules[module]["last"] == 'global':
                             embed.add_field(name='Module {}'.format(module), value='> :globe_with_meridians:', inline=True)
-                            #status = status + ':globe_with_meridians: **' + module + '**\n'
                         elif serverlistmodules[module]["last"] == 'enabled':
                             embed.add_field(name='Module {}'.format(module), value='> :white_check_mark:', inline=True)
-                            #status = status + ':white_check_mark: **' + module + '**\n'
                         else:
                             embed.add_field(name='Module {}'.format(module), value='> :x:', inline=True)
-                            #status = status + ':x: **' + module + '**\n'
                 embed.add_field(name='Legend :', value=legend, inline=False)
                 await chan.send(embed=embed)
     
