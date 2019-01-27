@@ -83,6 +83,9 @@ def saveData(file, data, id = None):
             return
         with open('data/servers/{}.json'.format(id), 'w') as e:
             json.dump(data, e)
+    elif file == 'default':
+        with open('data/default.json', 'w') as e:
+            json.dump(data, e)
 
 def getDefault():
     with open('data/default.json') as e:
