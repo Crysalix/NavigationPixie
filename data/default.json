@@ -1,90 +1,104 @@
 {
-    "bot": {
-		"config": {
-			"lang": {
-                "type": "str",
-                "validate": "en/fr",
-                "value": "en"
-            }
-		}
+  "mod": {
+    "last": "disabled",
+    "config": {
+      "modlist": {
+        "type": "usertaglist",
+        "value": "None"
+      }
     },
-    "welcome": {
-		"config": {
-			"message": {
-                "type": "str",
-                "value": "Welcome to my awesome server !"
-            },
-			"channel": {
-                "type": "chantag",
-                "value": "None"
-            }
-		},
-        "last": "disabled",
-        "default": "disabled"
-    },
-    "help": {
-		"config": {
-			"rep": {
-                "type": "str",
-                "validate": "pm/channel",
-                "value": "channel"
-            }
-		},
-        "last": "global",
-        "default": "global"
-    },
-    "poll": {
-        "config": "None",
-        "last": "enabled",
-        "default": "enabled"
-    },
-    "misc": {
-        "config": "None",
-        "last": "enabled",
-        "default": "enabled"
-    },
-    "admin": {
-		"config": {
-			"adminlist": {
-                "type": "usertaglist",
-                "value": "None"
-            }
-		},
-        "last": "disabled",
-        "default": "disabled"
-    },
-    "mod": {
-		"config": {
-			"modlist": {
-                "type": "usertaglist",
-                "value": "None"
-            }
-		},
-        "last": "disabled",
-        "default": "disabled"
-    },
-    "jokes": {
-        "config": "None",
-        "last": "disabled",
-        "default": "disabled"
-    },
-    "games": {
-        "config": "None",
-        "last": "global",
-        "default": "global"
-    },
-    "logging": {
-		"config": {
-			"modlog_chan": {
-                "type": "chantag",
-                "value": "None"
-            },
-			"adminlog_chan": {
-                "type": "chantag",
-                "value": "None"
-            }
-		},
-        "last": "disabled",
-        "default": "disabled"
+    "default": "disabled"
+  },
+  "bot": {
+    "config": {
+      "lang": {
+        "type": "str",
+        "validate": "en/fr",
+        "value": "en"
+      }
     }
+  },
+  "admin": {
+    "last": "disabled",
+    "config": {
+      "adminlist": {
+        "type": "usertaglist",
+        "value": "None"
+      }
+    },
+    "default": "disabled"
+  },
+  "help": {
+    "last": "global",
+    "config": {
+      "rep": {
+        "type": "str",
+        "validate": "pm/channel",
+        "value": "channel"
+      }
+    },
+    "default": "global"
+  },
+  "poll": {
+    "last": "enabled",
+    "config": "None",
+    "default": "enabled"
+  },
+  "misc": {
+    "last": "enabled",
+    "config": "None",
+    "default": "enabled"
+  },
+  "tools": {
+    "last": "disabled",
+    "config": "None",
+    "default": "disabled"
+  },
+  "welcome": {
+    "last": "disabled",
+    "config": {
+      "joinmsg": {
+        "type": "str",
+        "value": "Welcome {user} to my awesome server !"
+      },
+      "leavemsg": {
+        "type": "str",
+        "value": "{user} leaved us."
+      },
+      "channel": {
+        "type": "chantag",
+        "value": "None"
+      }
+    },
+    "default": "disabled"
+  },
+  "games": {
+    "last": "global",
+    "config": "None",
+    "default": "global"
+  },
+  "logging": {
+    "last": "disabled",
+    "config": {
+      "modlog_chan": {
+        "type": "chantag",
+        "value": "None"
+      },
+      "adminlog_chan": {
+        "type": "chantag",
+        "value": "None"
+      }
+    },
+    "default": "disabled"
+  },
+  "reacrole": {
+    "last": "disabled",
+    "config": "None",
+    "default": "disabled"
+  },
+  "jokes": {
+    "last": "disabled",
+    "config": "None",
+    "default": "disabled"
+  }
 }

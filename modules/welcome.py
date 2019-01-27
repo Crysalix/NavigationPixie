@@ -16,7 +16,7 @@ class Welcome:
     async def on_member_join(self, member):
         serverlistmodules = readData('server', member.guild.id)
         if serverlistmodules["welcome"]["last"] == "enabled":
-            fmt = serverlistmodules['welcome']['config']['message']['value']
+            fmt = serverlistmodules['welcome']['config']['joinmsg']['value']
             channel = str(''.join(filter(str.isdigit, serverlistmodules['welcome']['config']['channel']['value'])))
             userid = '<@{}>'.format(member.id)
             await self.bot.get_channel(int(channel)).send(fmt.format(user=userid))
@@ -24,7 +24,7 @@ class Welcome:
     async def on_member_remove(self, member):
         serverlistmodules = readData('server', member.guild.id)
         if serverlistmodules["welcome"]["last"] == "enabled":
-            fmt = '{user} nous a quitté. :wave:'
+            fmt = serverlistmodules['welcome']['config']['leavemsg']['value']
             channel = str(''.join(filter(str.isdigit, serverlistmodules['welcome']['config']['channel']['value'])))
             await self.bot.get_channel(int(channel)).send(fmt.format(user=member.name))
 

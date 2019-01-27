@@ -122,7 +122,8 @@
   },
   "welcome": {
     "config": {
-      "message": "Message posted when a user join the server.",
+      "joinmsg": "Message posted when a user join the server.",
+      "leavemsg": "Message posted when a user leave the server.",
       "channel": "The channel where the messages are posted."
     },
     "commands": "None"

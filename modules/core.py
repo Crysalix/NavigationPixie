@@ -84,7 +84,7 @@ class Core:
     #MODULE LOAD/UNLOAD/RELOAD COMMAND (BOTMASTER ONLY)
     @commands.command()
     async def load(self, ctx, *args):
-        """Load custom bot modules."""
+        """Load given modules."""
         if ctx.message.author.id == cfg.bot_ownerid:
             chan = ctx.message.channel
             if args:
@@ -117,7 +117,7 @@ class Core:
 
     @commands.command()
     async def unload(self, ctx, *args):
-        """Unload custom bot modules."""
+        """Unload given modules."""
         if ctx.message.author.id == cfg.bot_ownerid:
             chan = ctx.message.channel
             if args:
@@ -140,7 +140,7 @@ class Core:
 
     @commands.command()
     async def reload(self, ctx, *args):#IMPROVE, KEYERROR NOT RAISED !
-        """Reload given bot modules, or all modules."""
+        """Reload given modules, or all modules."""
         if ctx.message.author.id == cfg.bot_ownerid:
             listmodules = readData('main')
             chan = ctx.message.channel
@@ -190,6 +190,7 @@ class Core:
     #MODULE ENABLE/DISABLE COMMAND (SERVERADMIN ONLY)
     @commands.command()
     async def enable(self, ctx, *args):
+        """Enable given modules."""
         if ctx.message.author.id == ctx.message.author.guild.owner.id:
             serverlistmodules = readData('server', ctx.message.author.guild.id)
             lang = serverlistmodules['bot']['config']['lang']['value']
@@ -220,6 +221,7 @@ class Core:
 
     @commands.command()
     async def disable(self, ctx, *args):
+        """Disable given modules."""
         if ctx.message.author.id == ctx.message.author.guild.owner.id:
             serverlistmodules = readData('server', ctx.message.author.guild.id)
             lang = serverlistmodules['bot']['config']['lang']['value']
@@ -249,7 +251,7 @@ class Core:
     #MODULE LIST VIEWER
     @commands.command()
     async def module(self, ctx):
-        """Module list generator"""
+        """Print modules status."""
         if(ctx.message.author.id == cfg.bot_ownerid or ctx.message.author.id == ctx.message.author.guild.owner.id):
             listmodules = readData('main')
             serverlistmodules = readData('server', ctx.message.author.guild.id)
@@ -286,7 +288,7 @@ class Core:
     #MODULE CONFIGURATION COMMAND
     @commands.command()
     async def config(self, ctx, *args):
-        """Bot module configuration"""
+        """Module configuration."""
         if ctx.message.author.id == ctx.message.author.guild.owner.id:
             chan = ctx.message.channel
             if args:
@@ -397,6 +399,7 @@ class Core:
 
     @commands.command()
     async def checkconfig(self, ctx, *args):
+        """Check missing configuration for given module."""
         if ctx.message.author.id == ctx.message.author.guild.owner.id:
             serverlistmodules = readData('server', ctx.message.author.guild.id)
             lang = serverlistmodules['bot']['config']['lang']['value']
