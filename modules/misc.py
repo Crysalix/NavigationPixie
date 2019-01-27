@@ -112,9 +112,9 @@ class Misc:
             chan = ctx.message.channel
             if rand == 0:
                 await chan.send('Listen !')
-            if rand == 1:
+            elif rand == 1:
                 await chan.send('Hooo')
-            if rand == 2:
+            elif rand == 2:
                 await chan.send('<@{}> Wake up !'.format(ctx.message.author.id))
 
     @commands.command()
