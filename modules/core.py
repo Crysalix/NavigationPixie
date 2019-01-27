@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.5
+#!/usr/bin/env python3
 import asyncio
 import datetime
 import discord
@@ -18,18 +18,43 @@ class Core:
     def __unload(self):
         pass
 
+    @commands.command(name='import')
+    @commands.is_owner()
+    async def _import(self, ctx, arg1):
+        """Import new module then add new data/config."""
+        if arg1:
+            try:
+                self.bot.load_extension('modules.' + arg1)
+                listmodules = readData('main')
+                listmodules.update({arg1: {"last": "unloaded", "default": "unloaded"}})
+                saveData('main', listmodules)
+                default = getDefault()
+                if default[arg1]:
+                    await ctx.send('Done !')
+            except ImportError:
+                await ctx.send('Module not found !')
+            except discord.ClientException:
+                await ctx.send('Can\'t import module, setup function is missing.')
+            except KeyError:
+                await ctx.send('Done. Added default config value !')
+                default.update({arg1: {"config": "None", "default": "disabled", "last": "disabled"}})
+                saveData('default', default)
+            except:
+                await ctx.send('```py\n%s\n```' % traceback.format_exc())
+        else:
+            await ctx.send('Module name required !')
+
     @commands.command()
+    @commands.is_owner()
     async def checkmodule(self, ctx, arg1):
-        if ctx.message.author.id == cfg.bot_ownerid:
-            if arg1:
-                res = checkModule(arg1)
-                chan = ctx.message.channel
-                if res.returncode == 0:
-                    await chan.send('OK !')
-                else:
-                    await chan.send('```py\n' + str(res.stderr.decode().strip()) + '```')
+        if arg1:
+            res = checkModule(arg1)
+            if res.returncode == 0:
+                await ctx.send('OK !')
             else:
-                await chan.send('Module name required !')
+                await ctx.send('```py\n' + str(res.stderr.decode().strip()) + '```')
+        else:
+            await ctx.send('Module name required !')
 
     #MODULE LOAD/UNLOAD/RELOAD COMMAND (BOTMASTER ONLY)
     @commands.command()
