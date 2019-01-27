@@ -20,7 +20,7 @@ class Core:
 
     @commands.command(name='import')
     @commands.is_owner()
-    async def _import(self, ctx, arg1):
+    async def _import(self, ctx, arg1 = None):
         """Import new module then add new data/config."""
         if arg1:
             try:
@@ -39,6 +39,31 @@ class Core:
                 await ctx.send('Done. Added default config value !')
                 default.update({arg1: {"config": "None", "default": "disabled", "last": "disabled"}})
                 saveData('default', default)
+            except:
+                await ctx.send('```py\n%s\n```' % traceback.format_exc())
+        else:
+            await ctx.send('Module name required !')
+
+    @commands.command()
+    @commands.is_owner()
+    async def remove(self, ctx, arg1 = None):
+        """Remove a module and configs value."""
+        if arg1:
+            try:
+                self.bot.unload_extension('modules.' + arg1)
+                listmodules = readData('main')
+                del listmodules[arg1]
+                saveData('main', listmodules)
+                default = getDefault()
+                del default[arg1]
+                saveData('default', default)
+                await ctx.send('Done !')
+            except ImportError:
+                await ctx.send('ImportError')
+            except discord.ClientException:
+                await ctx.send('discord.ClientException')
+            except KeyError:
+                await ctx.send('KeyError')
             except:
                 await ctx.send('```py\n%s\n```' % traceback.format_exc())
         else:
@@ -244,14 +269,17 @@ class Core:
                 legend = ':white_check_mark:>Enabled :x:>Disabled :no_entry:>Unavailable :globe_with_meridians:>Global'
                 for module in sorted(serverlistmodules):
                     if module != "bot":
-                        if listmodules[module]["last"] == 'unloaded':
-                            embed.add_field(name='Module {}'.format(module), value='> :no_entry:', inline=True)
-                        elif serverlistmodules[module]["last"] == 'global':
-                            embed.add_field(name='Module {}'.format(module), value='> :globe_with_meridians:', inline=True)
-                        elif serverlistmodules[module]["last"] == 'enabled':
-                            embed.add_field(name='Module {}'.format(module), value='> :white_check_mark:', inline=True)
-                        else:
-                            embed.add_field(name='Module {}'.format(module), value='> :x:', inline=True)
+                        try:
+                            if listmodules[module]["last"] == 'unloaded':
+                                embed.add_field(name='Module {}'.format(module), value='> :no_entry:', inline=True)
+                            elif serverlistmodules[module]["last"] == 'global':
+                                embed.add_field(name='Module {}'.format(module), value='> :globe_with_meridians:', inline=True)
+                            elif serverlistmodules[module]["last"] == 'enabled':
+                                embed.add_field(name='Module {}'.format(module), value='> :white_check_mark:', inline=True)
+                            else:
+                                embed.add_field(name='Module {}'.format(module), value='> :x:', inline=True)
+                        except KeyError:#when data is found for removed module.
+                            pass
                 embed.add_field(name='Legend :', value=legend, inline=False)
                 await chan.send(embed=embed)
     
