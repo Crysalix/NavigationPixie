@@ -114,17 +114,15 @@ async def on_error(event, *args, **kwargs):
 @bot.command(pass_context=True)
 async def restart(ctx):
     if ctx.message.author.id == cfg.bot_ownerid:
-        chan = ctx.message.channel
         logging.info('NAVIGATIONPIXIE > Restart')
-        await chan.send('I`ll be back !')
+        await ctx.send('I`ll be back !')
         await bot.close()
 
 @bot.command(pass_context=True)
 async def quit(ctx):
     if ctx.message.author.id == cfg.bot_ownerid:
-        chan = ctx.message.channel
         logging.info('NAVIGATIONPIXIE > SystemExit')
-        await chan.send('Goodbye !')
+        await ctx.send('Goodbye !')
         await bot.close()
         sys.exit()
 

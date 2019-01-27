@@ -22,17 +22,16 @@ class Poll:
         if isEnabled('poll', ctx.message.author.guild.id):
             serverlistmodules = readData('server', ctx.message.author.guild.id)
             lang = serverlistmodules['bot']['config']['lang']['value']
-            chan = ctx.message.channel
             if args:
                 if len(args) >= 12:
-                    await chan.send(self.locales[lang]['poll']['messages']['toomanyargs'])
+                    await ctx.send(self.locales[lang]['poll']['messages']['toomanyargs'])
                     return
                 #Build message
                 rep = ''
                 repcontent = '\n'
                 if len(args) > 1:
                     if not len(args) > 2:
-                        await chan.send(self.locales[lang]['poll']['messages']['morethanonechoice'])
+                        await ctx.send(self.locales[lang]['poll']['messages']['morethanonechoice'])
                         return
                     num = str(len(args))
                     num = int(num)
@@ -61,7 +60,7 @@ class Poll:
                             repcontent = repcontent + react_num[count] + ' : ' + arg + '\n'
                             count += 1
                     rep = repheader + repcontent
-                    await chan.send(rep + '\n\n' + self.locales[lang]['poll']['messages']['votenow'])
+                    await ctx.send(rep + '\n\n' + self.locales[lang]['poll']['messages']['votenow'])
                 elif len(args) == 1:
                     embed = discord.Embed(title='', description='\n:bar_chart: **' + args[0] + '**', colour=0x7289da, timestamp=datetime.datetime.utcnow())
                     if serverlistmodules['bot']['config']['lang']['value'] == 'fr':
@@ -69,20 +68,20 @@ class Poll:
                     else:
                         embed.add_field(name=':thumbup: / :thumbdown:', value='**YES** / **NO**', inline=False)
                         
-                    await chan.send(self.locales[lang]['poll']['messages']['littlepollfrom'].format(ctx.message.author.id), embed=embed)
+                    await ctx.send(self.locales[lang]['poll']['messages']['littlepollfrom'].format(ctx.message.author.id), embed=embed)
             else:
                 if serverlistmodules['bot']['config']['lang']['value'] == 'fr':
                     embed = discord.Embed(title='Sondages express', description='Sondages simples ou à choix multiples (maximum 10 choix).', colour=0x7289da, timestamp=datetime.datetime.utcnow())
                     embed.add_field(name='Pour une simple question', value='!poll "ma question"', inline=False)
                     embed.add_field(name='Pour un sondage à choix multiple', value='!poll "ma question" "choix 1" "choix 2"', inline=False)
                     embed.set_footer(text='N\'oubliez pas les doubles guillemets (").')
-                    await chan.send(embed=embed)
+                    await ctx.send(embed=embed)
                 else:
                     embed = discord.Embed(title='Express polls', description='Simple poll or with multiple choice (max 10 choices).', colour=0x7289da, timestamp=datetime.datetime.utcnow())
                     embed.add_field(name='For a simple poll', value='!poll "my question"', inline=False)
                     embed.add_field(name='For a multiple choice poll', value='!poll "my question" "choice 1" "choice 2"', inline=False)
                     embed.set_footer(text='Don\'t forget the double quotes. (")')
-                    await chan.send(embed=embed)
+                    await ctx.send(embed=embed)
 
     #reaction add
     async def on_message(self, message):
