@@ -22,31 +22,6 @@ listmodules = readData('main')
 bot = commands.Bot(command_prefix='!', description='Navigation Pixie')
 bot.remove_command('help')
 
-# async def keep_running(client, token):
-    # retry = backoff.ExponentialBackoff()
-    # while True:
-        # try:
-            # await client.login(token)
-        # except (discord.HTTPException, aiohttp.ClientError):
-            # logging.exception("Discord.py pls login")
-            # await asyncio.sleep(retry.delay())
-        # else:
-            # break
-    # while client.is_logged_in:
-        # if client.is_closed:
-            # client._closed.clear()
-            # client.http.recreate()
-        # try:
-            # await client.connect()
-        # except (discord.HTTPException, aiohttp.ClientError,
-                # discord.GatewayNotFound, discord.ConnectionClosed,
-                # websockets.InvalidHandshake,
-                # websockets.WebSocketProtocolError) as e:
-            # if isinstance(e, discord.ConnectionClosed) and e.code == 4004:
-                # raise # Do not reconnect on authentication failure
-            # logging.exception("Discord.py pls keep running")
-            # await asyncio.sleep(retry.delay())
-
 @bot.event
 async def on_ready():
     chan = bot.get_channel(cfg.botlog_chan)
