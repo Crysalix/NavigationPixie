@@ -5,7 +5,7 @@ import discord
 from discord.ext import commands
 from pixie_function import *
 
-class Welcome:
+class Welcome(commands.Cog, name="Welcome"):
 
     def __init__(self, bot):
         self.bot = bot

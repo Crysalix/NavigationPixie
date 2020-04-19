@@ -7,7 +7,7 @@ import random
 from discord.ext import commands
 from pixie_function import *
 
-class Poll:
+class Poll(commands.Cog, name="Poll"):
 
     def __init__(self, bot):
         self.bot = bot

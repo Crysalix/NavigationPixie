@@ -8,7 +8,7 @@ import config as cfg
 from discord.ext import commands
 from pixie_function import *
 
-class Misc:
+class Misc(commands.Cog, name="Misc"):
 
     def __init__(self, bot):
         self.bot = bot

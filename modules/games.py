@@ -7,7 +7,7 @@ from discord.ext import commands
 from discord.utils import get
 from pixie_function import *
 
-class Games:
+class Games(commands.Cog, name="Games"):
 
     def __init__(self, bot):
 

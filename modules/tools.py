@@ -11,7 +11,7 @@ from pixie_function import *
 
 import config as cfg
 
-class Tools:
+class Tools(commands.Cog, name="Tools"):
 
     def __init__(self, bot):
         self.bot = bot

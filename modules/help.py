@@ -8,7 +8,7 @@ from pixie_function import *
 
 import config as cfg
 
-class Help:
+class Help(commands.Cog, name="Help"):
 
     def __init__(self, bot):
         self.bot = bot

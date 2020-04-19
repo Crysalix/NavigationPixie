@@ -5,7 +5,7 @@ import random
 from discord.ext import commands
 from pixie_function import *
 
-class Jokes:
+class Jokes(commands.Cog, name="Jokes"):
 
     def __init__(self, bot):
         self.bot = bot

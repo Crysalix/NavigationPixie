@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.5
+#!/usr/bin/env python3
 import asyncio
 import datetime
 import discord
@@ -8,7 +8,7 @@ from pixie_function import *
 
 import config as cfg
 
-class Logging:
+class Logging(commands.Cog, name="Logging"):
 
     def __init__(self, bot):
         self.bot = bot
@@ -51,6 +51,16 @@ class Logging:
             #Webhook
             return
 
+    # async def on_raw_message_delete(self, payload):
+        # serverlistmodules = readData('server', payload.guild_id)
+        # if serverlistmodules["logging"]["last"] == "enabled":
+            # lang = serverlistmodules['bot']['config']['lang']['value']
+            # channel = str(''.join(filter(str.isdigit, serverlistmodules['logging']['config']['adminlog_chan']['value'])))
+            # fmt = self.locales[lang]['logging']['messages']['on_message_delete']
+            # message = self.bot.get_message(payload.message_id)
+            # embed = discord.Embed(description=fmt.format(message.author.id, payload.channel_id, message.content), colour=0xFF0000, timestamp=datetime.datetime.utcnow())
+            # await self.bot.get_channel(int(channel)).send(embed=embed)
+            
     async def on_message_delete(self, message):
         if message.author == self.bot.user:
             return
@@ -149,7 +159,7 @@ class Logging:
             fmt = self.locales[lang]['logging']['messages']['on_member_remove']
             embed = discord.Embed(description=fmt.format(member.name), colour=0xFF8000, timestamp=datetime.datetime.utcnow())
             await self.bot.get_channel(int(channel)).send(embed=embed)
-            
+
     #SERVER EVENT
     async def on_guild_update(self, before, after):
         serverlistmodules = readData('server', before.id)
@@ -178,11 +188,14 @@ class Logging:
     async def on_guild_role_update(self, before, after):
         serverlistmodules = readData('server', before.id)
         if serverlistmodules["logging"]["last"] == "enabled":
-            if before.name != after.name:
-                lang = serverlistmodules['bot']['config']['lang']['value']
-                channel = str(''.join(filter(str.isdigit, serverlistmodules['logging']['config']['adminlog_chan']['value'])))
-                fmt = self.locales[lang]['logging']['messages']['on_server_role_update']
-                await self.bot.get_channel(int(channel)).send(fmt.format(before, after))
+            #if before.name != after.name:
+            lang = serverlistmodules['bot']['config']['lang']['value']
+            channel = str(''.join(filter(str.isdigit, serverlistmodules['logging']['config']['adminlog_chan']['value'])))
+            fmt = self.locales[lang]['logging']['messages']['on_server_role_update']
+            embed = discord.Embed(description='Role update', colour=0xFF8000, timestamp=datetime.datetime.utcnow())
+            embed.add_field(name='Name :', value=fmt.format(before, after))
+            embed.set_footer(text=before.id)
+            await self.bot.get_channel(int(channel)).send(embed=embed)
 
 def setup(bot):
     bot.add_cog(Logging(bot))

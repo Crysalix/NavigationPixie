@@ -174,3 +174,5 @@ async def on_guild_remove(guild):
 logging.basicConfig(format='%(asctime)s | [%(levelname)s] | %(message)s', datefmt='%m/%d/%Y - %H:%M:%S', filename='latest.log',level=logging.INFO)
 bot.run(cfg.token)
 # asyncio.get_event_loop().run_until_complete(keep_running(bot, cfg.token))
+
+logging.error('EOF')

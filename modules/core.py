@@ -10,7 +10,7 @@ from pixie_function import *
 
 import config as cfg
 
-class Core:
+class Core(commands.Cog, name="Core"):
 
     def __init__(self, bot):
         self.bot = bot
