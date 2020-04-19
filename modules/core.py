@@ -74,7 +74,7 @@ class Core(commands.Cog, name="Core"):
 
     @commands.command()
     @commands.is_owner()
-    async def checkmodule(self, ctx, arg1):
+    async def checkmodule(self, ctx, arg1 = None):
         if arg1:
             res = checkModule(arg1)
             if res.returncode == 0:
