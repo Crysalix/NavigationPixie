@@ -42,7 +42,7 @@
   },
   "help": {
     "config": {
-      "rep": "Où répondre à la commande `!help`. (`pm` pour message privé ou `chan` pour le cannal actuel)"
+      "rep": "Où répondre à la commande `!help`. (`pm` pour message privé ou `chan` pour le salon actuel)"
     },
     "commands": {
       "help": "Affiche ce message."
