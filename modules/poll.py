@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.5
+#!/usr/bin/env python3
 import asyncio
 import datetime
 import discord
@@ -84,6 +84,7 @@ class Poll(commands.Cog, name="Poll"):
                     await ctx.send(embed=embed)
 
     #reaction add
+    @commands.Cog.listener()
     async def on_message(self, message):
         if message.author == self.bot.user:
             #1 item

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.5
+#!/usr/bin/env python3
 import asyncio
 import discord
 
@@ -13,6 +13,7 @@ class Welcome(commands.Cog, name="Welcome"):
     def __unload(self):
         pass
 
+    @commands.Cog.listener()
     async def on_member_join(self, member):
         serverlistmodules = readData('server', member.guild.id)
         if serverlistmodules["welcome"]["last"] == "enabled":
@@ -21,6 +22,7 @@ class Welcome(commands.Cog, name="Welcome"):
             userid = '<@{}>'.format(member.id)
             await self.bot.get_channel(int(channel)).send(fmt.format(user=userid))
 
+    @commands.Cog.listener()
     async def on_member_remove(self, member):
         serverlistmodules = readData('server', member.guild.id)
         if serverlistmodules["welcome"]["last"] == "enabled":
