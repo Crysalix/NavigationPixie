@@ -18,7 +18,9 @@ import config as cfg
 
 listmodules = readData('main')
 
-bot = commands.Bot(command_prefix='!', description='Navigation Pixie')
+intents = discord.Intents.all()
+bot = commands.Bot(command_prefix=commands.when_mentioned_or('!'), description='Navigation Pixie', intents=intents)
+#bot = commands.Bot(command_prefix='!', description='Navigation Pixie', intents=intents)
 bot.remove_command('help')
 
 @bot.event
@@ -28,7 +30,7 @@ async def on_ready():
     await chan.send('Connected ! Loading modules...')
     #Loading core module first
     try:
-        bot.load_extension('modules.core')
+        await bot.load_extension('modules.core')
     except ImportError:
         await chan.send('<@{}> Failed to load core module ! Can\'t init bot instance !'.format(cfg.bot_ownerid))
         logging.error('NAVIGATIONPIXIE > Failed to load core module ! Can\'t init bot instance !')
@@ -44,7 +46,7 @@ async def on_ready():
     for module in listmodules:
         if (listmodules[module]["default"] == "loaded" or listmodules[module]["default"] == "global"):
             try:
-                bot.load_extension('modules.' + module)
+                await bot.load_extension('modules.' + module)
             except ImportError:
                 await chan.send('```py\n%s\n```' % traceback.format_exc())
                 logging.error('NAVIGATIONPIXIE > Failed to load module {}.'.format(module))
@@ -145,5 +147,5 @@ async def on_guild_remove(guild):
     em.add_field(name='2FA', value=guild.mfa_level)
     await bot.get_channel(cfg.botlog_chan).send(embed=em)
 
-logging.basicConfig(format='%(asctime)s | [%(levelname)s] | %(message)s', datefmt='%m/%d/%Y - %H:%M:%S', filename='latest.log',level=logging.INFO)
+logging.basicConfig(format='%(asctime)s | [%(levelname)s] | %(message)s', datefmt='%m/%d/%Y - %H:%M:%S', filename='/opt/bots/navigationpixie/latest.log',level=logging.INFO)
 bot.run(cfg.token)

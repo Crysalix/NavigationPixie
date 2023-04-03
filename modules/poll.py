@@ -67,7 +67,7 @@ class Poll(commands.Cog, name="Poll"):
                         embed.add_field(name=':thumbup: / :thumbdown:', value='**OUI** / **NON**', inline=False)
                     else:
                         embed.add_field(name=':thumbup: / :thumbdown:', value='**YES** / **NO**', inline=False)
-                        
+
                     await ctx.send(self.locales[lang]['poll']['messages']['littlepollfrom'].format(ctx.message.author.id), embed=embed)
             else:
                 if serverlistmodules['bot']['config']['lang']['value'] == 'fr':
@@ -124,5 +124,5 @@ class Poll(commands.Cog, name="Poll"):
                     await message.add_reaction('\N{KEYCAP TEN}')
         #await self.bot.process_commands(message)
 
-def setup(bot):
-    bot.add_cog(Poll(bot))
+async def setup(bot):
+    await bot.add_cog(Poll(bot))

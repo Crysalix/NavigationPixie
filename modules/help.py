@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.5
+#!/usr/bin/env python3
 import asyncio
 import datetime
 import discord
@@ -48,6 +48,7 @@ class Help(commands.Cog, name="Help"):
         if (listmodules["help"]["last"] == "loaded" and serverlistmodules["help"]["last"] == "enabled"):
             embed.add_field(name='!help', value=self.locales[lang]['help']['commands']['help'], inline=False)
         if (listmodules["misc"]["last"] == "loaded" and serverlistmodules["misc"]["last"] == "enabled"):
+            embed.add_field(name='!excuse [num]', value=self.locales[lang]['misc']['commands']['excuse'], inline=False)
             embed.add_field(name='!flip', value=self.locales[lang]['misc']['commands']['flip'], inline=False)
             embed.add_field(name='!ping', value='Pong !', inline=False)
             embed.add_field(name='!rand', value=self.locales[lang]['misc']['commands']['rand'], inline=False)
@@ -58,5 +59,5 @@ class Help(commands.Cog, name="Help"):
             embed.add_field(name='!poll', value=self.locales[lang]['poll']['commands']['poll'], inline=False)
         await ctx.send(embed=embed)
 
-def setup(bot):
-    bot.add_cog(Help(bot))
+async def setup(bot):
+    await bot.add_cog(Help(bot))

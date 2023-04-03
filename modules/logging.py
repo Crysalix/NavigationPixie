@@ -63,7 +63,7 @@ class Logging(commands.Cog, name="Logging"):
             # message = self.bot.get_message(payload.message_id)
             # embed = discord.Embed(description=fmt.format(message.author.id, payload.channel_id, message.content), colour=0xFF0000, timestamp=datetime.datetime.utcnow())
             # await self.bot.get_channel(int(channel)).send(embed=embed)
-            
+
     @commands.Cog.listener()
     async def on_message_delete(self, message):
         if message.author == self.bot.user:
@@ -103,7 +103,7 @@ class Logging(commands.Cog, name="Logging"):
 
     @commands.Cog.listener()
     async def on_reaction_clear(self, message, reactions):
-        return # Not working 
+        return # Not working
         if message.author.id == self.bot.user.id:
             return
         serverlistmodules = readData('server', message.author.guild.id)
@@ -214,5 +214,5 @@ class Logging(commands.Cog, name="Logging"):
             embed.set_footer(text=before.id)
             await self.bot.get_channel(int(channel)).send(embed=embed)
 
-def setup(bot):
-    bot.add_cog(Logging(bot))
+async def setup(bot):
+    await bot.add_cog(Logging(bot))

@@ -131,7 +131,7 @@ class Core(commands.Cog, name="Core"):
                         elif listmodules[module]["last"] == "unloaded":
                             await ctx.send('Module **{}** already unloaded.'.format(module))
                         else:
-                            self.bot.unload_extension('modules.' + module)
+                            await self.bot.unload_extension('modules.' + module)
                             listmodules[module]["last"] = "unloaded"
                             await ctx.send('Done !')
                             logging.info('NAVIGATIONPIXIE > Module unloaded : {}'.format(module))
@@ -153,9 +153,9 @@ class Core(commands.Cog, name="Core"):
                         if res.returncode != 0:
                             await ctx.send('```py\n' + str(res.stderr.decode().strip()) + '```')
                         elif (module == "core" or listmodules[module]["last"] == "loaded"):
-                            self.bot.unload_extension('modules.' + module)
+                            await self.bot.unload_extension('modules.' + module)
                             try:
-                                self.bot.load_extension('modules.' + module)
+                                await self.bot.load_extension('modules.' + module)
                             except ImportError:
                                 if module != "core":
                                     listmodules[module]["last"] = "unloaded"
@@ -176,9 +176,9 @@ class Core(commands.Cog, name="Core"):
             else:
                 for module in listmodules:
                     if listmodules[module]["last"] == "loaded":
-                        self.bot.unload_extension('modules.' + module)
+                        await self.bot.unload_extension('modules.' + module)
                         try:
-                            self.bot.load_extension('modules.' + module)
+                            await self.bot.load_extension('modules.' + module)
                         except ImportError:
                             if module != "core":
                                 listmodules[module]["last"] = "unloaded"
@@ -285,7 +285,7 @@ class Core(commands.Cog, name="Core"):
                             pass
                 embed.add_field(name='Legend :', value=legend, inline=False)
                 await ctx.send(embed=embed)
-    
+
     #MODULE CONFIGURATION COMMAND
     @commands.command()
     async def config(self, ctx, *args):
@@ -415,5 +415,5 @@ class Core(commands.Cog, name="Core"):
             else:
                 await ctx.send(self.locales[lang]['core']['messages']['modulerequired'])
 
-def setup(bot):
-    bot.add_cog(Core(bot))
+async def setup(bot):
+    await bot.add_cog(Core(bot))

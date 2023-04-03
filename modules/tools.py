@@ -57,5 +57,5 @@ class Tools(commands.Cog, name="Tools"):
             else:
                 await ctx.send('You need to tag an user.')
 
-def setup(bot):
-    bot.add_cog(Tools(bot))
+async def setup(bot):
+    await bot.add_cog(Tools(bot))

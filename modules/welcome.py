@@ -30,5 +30,5 @@ class Welcome(commands.Cog, name="Welcome"):
             channel = str(''.join(filter(str.isdigit, serverlistmodules['welcome']['config']['channel']['value'])))
             await self.bot.get_channel(int(channel)).send(fmt.format(user=member.name))
 
-def setup(bot):
-    bot.add_cog(Welcome(bot))
+async def setup(bot):
+    await bot.add_cog(Welcome(bot))

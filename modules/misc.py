@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.5
+#!/usr/bin/env python3
 import asyncio
 import discord
 import random
@@ -28,26 +28,25 @@ class Misc(commands.Cog, name="Misc"):
 
     @commands.command()
     async def excuse(self, ctx, rand=1):
-        if ctx.message.author.id == cfg.bot_ownerid:
-            count=0
-            msg=''
-            while True:
-                ran = random.randrange(5)
-                ran += 1
-                if ran == 1:
-                    msg=msg + '\n- Le démon s\'est échappé du pentagramme.'
-                elif ran == 2:
-                    msg=msg + '\n- Invasion d\'Elfes.'
-                elif ran == 3:
-                    msg=msg + '\n- Le dev code avec le cul.'
-                elif ran == 4:
-                    msg=msg + '\n- Les lutins sont en grève.'
-                elif ran == 5:
-                    msg=msg + '\n- Le chat s\'est couché sur le clavier.'
-                count +=1
-                if count == rand:
-                    break
-            await ctx.send('**Excuses :** ' + msg)
+        count=0
+        msg=''
+        while True:
+            ran = random.randrange(5)
+            ran += 1
+            if ran == 1:
+                msg=msg + '\n- Le démon s\'est échappé du pentagramme.'
+            elif ran == 2:
+                msg=msg + '\n- Invasion d\'Elfes.'
+            elif ran == 3:
+                msg=msg + '\n- Le dev code avec le cul.'
+            elif ran == 4:
+                msg=msg + '\n- Les lutins sont en grève.'
+            elif ran == 5:
+                msg=msg + '\n- Le chat s\'est couché sur le clavier.'
+            count +=1
+            if count == rand:
+                break
+        await ctx.send('**Excuses :** ' + msg)
 
     @commands.command()
     async def flip(self, ctx):
@@ -60,9 +59,9 @@ class Misc(commands.Cog, name="Misc"):
             else:
                 i = random.randrange(2)
                 if i == 0:
-                    await ctx.send('Pile !')
+                    await ctx.send('<@{}> Pile !'.format(ctx.message.author.id))
                 elif i == 1:
-                    await ctx.send('Face !')
+                    await ctx.send('<@{}> Face !'.format(ctx.message.author.id))
 
     @commands.command()
     async def roll(self, ctx):
@@ -136,5 +135,5 @@ class Misc(commands.Cog, name="Misc"):
             msg = ctx.message.content.split(" ", 1)[1]
             await ctx.send(msg)
 
-def setup(bot):
-    bot.add_cog(Misc(bot))
+async def setup(bot):
+    await bot.add_cog(Misc(bot))

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.5
+#!/usr/bin/env python3
 import asyncio
 import random
 
@@ -89,5 +89,5 @@ class Jokes(commands.Cog, name="Jokes"):
             elif rand == 24:
                 await ctx.send('Un éléphant et une girafe entre dans un bar. Que prennent-ils ?\nBeaucoup de place !')
 
-def setup(bot):
-    bot.add_cog(Jokes(bot))
+async def setup(bot):
+    await bot.add_cog(Jokes(bot))
