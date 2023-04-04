@@ -1,10 +1,13 @@
-#!/usr/bin/env python3.5
+#!/usr/bin/env python3
 import datetime
 import json
 import re
 import subprocess
 import sys
 import traceback
+import os
+
+root_dir = os.path.dirname(os.path.abspath(__file__))
 
 def isLoaded(module, id):
     botListModules = readData('main')
@@ -21,7 +24,7 @@ def isEnabled(module, id):
         return False
 
 def checkModule(module):
-    res = subprocess.run(['python3.5', '-m', 'py_compile', 'modules/' + module + '.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    res = subprocess.run(['python3', '-m', 'py_compile', root_dir + '/modules/' + module + '.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     return res
 
 def checkModuleConfig(module, id):
@@ -37,23 +40,23 @@ def checkModuleConfig(module, id):
 
 def readData(file, id = None, module = None):
     if file == 'main':
-        with open('data/modules.json') as e:
+        with open(root_dir + '/data/modules.json') as e:
             data = json.load(e)
     elif file == 'list':
-        with open('data/serverslist.json') as e:
+        with open(root_dir + '/data/serverslist.json') as e:
             data = json.load(e)
     elif file == 'locales':
-        with open('data/locales.json') as e:
+        with open(root_dir + '/data/locales.json') as e:
             data = json.load(e)
         for lang in data:
-            with open('data/locales/{}.json'.format(lang)) as e:
+            with open(root_dir + '/data/locales/{}.json'.format(lang)) as e:
                 data[lang] = json.load(e)
     elif file == 'server':
         try:
-            with open('data/servers/{}.json'.format(id)) as e:
+            with open(root_dir + '/data/servers/{}.json'.format(id)) as e:
                 data = json.load(e)
         except:
-            with open('data/default.json') as e:
+            with open(root_dir + '/data/default.json') as e:
                 data = json.load(e)
             saveData('server', data, id)
         else:
@@ -76,19 +79,19 @@ def readData(file, id = None, module = None):
 
 def saveData(file, data, id = None):
     if file == 'main':
-        with open('data/modules.json', 'w') as e:
+        with open(root_dir + '/data/modules.json', 'w') as e:
             json.dump(data, e)
     elif file == 'server':
         if id == None:
             return
-        with open('data/servers/{}.json'.format(id), 'w') as e:
+        with open(root_dir + '/data/servers/{}.json'.format(id), 'w') as e:
             json.dump(data, e)
     elif file == 'default':
-        with open('data/default.json', 'w') as e:
+        with open(root_dir + '/data/default.json', 'w') as e:
             json.dump(data, e)
 
 def getDefault():
-    with open('data/default.json') as e:
+    with open(root_dir + '/data/default.json') as e:
         data = json.load(e)
     return data
 
@@ -153,7 +156,7 @@ def validateValue(module, configKey, left):
             if left == right:
                 return True #left win !
         return False #right win !
-    
+
 def removeConfig(action, id, module, configKey, value = None):
     if action == 'clear':
         defaultlistmodule = getDefault()
