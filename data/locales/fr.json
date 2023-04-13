@@ -80,6 +80,7 @@
   },
   "misc": {
     "commands": {
+      "excuse": "Sortez vos plus belles excuses !",
       "flip": "Pile ou face ?",
       "roll": "Je lance un dé à 6 faces.",
       "ping": "Pong !",

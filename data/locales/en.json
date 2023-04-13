@@ -80,6 +80,7 @@
   },
   "misc": {
     "commands": {
+      "excuse": "Show your best excuses !",
       "flip": "Heads or tails ?",
       "roll": "I roll a six-sided dice.",
       "ping": "Pong !",
